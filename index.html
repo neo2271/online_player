@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta http-equiv="pragma" content="no-cache">
+  <title>Online player</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
+  <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
+  <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
+  <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
+  <link rel='stylesheet' href='https://cdn1.minhtamgroup.org/css/plyr.css'>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    @font-face {
+      font-family: segoeui;
+      src: url(https://cdn2.minhtamgroup.org/fonts/SEGOEUI.TTF);
+    }
+
+    * {
+      font-family: segoeui;
+    }
+  </style>
+</head>
+
+<body>
+  <b>URL: </b><input type="text" id="url" name="url">
+  <button id="watchBtn" onclick="javascript:watch()"><b>PLAY</b></button>
+  <b>
+      <a id="mp4_url" href="url" target="_blank"></a>
+  </b>
+
+  <!-- partial:index.partial.html -->
+  <div class="container">
+    <video id="video" controls crossorigin playsinline>
+      <!-- <source src="" type="video/mp4"> -->
+    </video>
+  </div>
+
+  <!-- partial -->
+  <script
+    src='https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL'></script>
+  <script src='https://cdn1.minhtamgroup.org/js/plyr.min.js'></script>
+  <script src="./script.js"></script>
+
+</body>
+
+</html>
