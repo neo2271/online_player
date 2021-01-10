@@ -8,5 +8,6 @@ window.player = player;
 function watch() {
     var x = document.getElementById("url").value;
     document.getElementById("mp4_url").innerHTML = x;
+    document.getElementById("mp4_url").href = x;
     document.getElementById("video").src = x;
   }
