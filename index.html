@@ -21,6 +21,7 @@
 
     * {
       font-family: segoeui;
+      word-wrap: break-word;
     }
   </style>
 </head>
@@ -29,18 +30,18 @@
   <b>URL: </b><input type="text" id="url" name="url" style="width: 69%;">
   <button id="watchBtn" onclick="javascript:watch()"><b>PLAY</b></button>
   <br>
-  <b>
-      <a id="org_url" href="." target="_blank"></a>
-      <br>
-      <a id="mp4_url" href="." target="_blank"></a>
-  </b>
 
-  <!-- partial:index.partial.html -->
   <div class="container">
     <video id="video" controls crossorigin playsinline>
       <!-- <source src="" type="video/mp4"> -->
-    </video>
-  </div>
+      </video>
+    </div>
+
+  <b>
+      <a id="org_url" href="." target="_blank"></a>
+      <br><br>
+      <a id="mp4_url" href="." target="_blank"></a>
+  </b>
 
   <!-- partial -->
   <script
