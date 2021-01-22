@@ -5,9 +5,37 @@ const player = new Plyr('video', { captions: { active: true } });
 // Expose player so it can be used from the console
 window.player = player;
 
+// Additional script
+var base_url = window.location.origin;
+var queryString = window.location.search;
+// console.log(queryString);
+
+var url = "";
+var new_url = "";
+
+if (queryString.length > 0) {
+    url = queryString.substring(queryString.indexOf("http"));
+
+    update_ui_url();
+    document.getElementById("url").value  = url;
+    window.history.pushState({path:base_url},'',base_url);
+}
+
 function watch() {
-    var x = document.getElementById("url").value;
-    document.getElementById("mp4_url").innerHTML = x;
-    document.getElementById("mp4_url").href = x;
-    document.getElementById("video").src = x;
-  }
+    url = document.getElementById("url").value;
+    url = url.substring(url.indexOf("http"));
+
+    update_ui_url();
+}
+
+function update_ui_url() {
+    new_url = base_url + "?url=" + url;
+
+    document.getElementById("org_url").innerHTML = url;
+    document.getElementById("org_url").href = url;
+
+    document.getElementById("mp4_url").innerHTML = new_url;
+    document.getElementById("mp4_url").href = new_url;
+
+    document.getElementById("video").src = url;
+}
