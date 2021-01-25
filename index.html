@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no">
   <meta name="theme-color" content="#000000">
   <meta http-equiv="pragma" content="no-cache">
-  <title>Online player | www.minhtamgroup.org</title>
+  <title>Online Player | www.minhtamgroup.org</title>
   <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
   <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
   <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
@@ -27,21 +27,26 @@
 </head>
 
 <body>
-  <b>URL: </b><input type="text" id="url" name="url" style="width: 69%;">
-  <button id="watchBtn" onclick="javascript:watch()"><b>PLAY</b></button>
-  <br>
+  <center>
+    <a href="./offline.html"><b>Offline Files Player</b></a>
+    <br><br>
 
-  <div class="container">
-    <video id="video" controls crossorigin playsinline>
-      <!-- <source src="" type="video/mp4"> -->
-      </video>
-    </div>
+    <b>URL: </b><input type="text" id="url" name="url" style="width: 69%;">
+    <button id="watchBtn" onclick="javascript:watch()"><b>PLAY</b></button>
+    <br>
 
-  <b>
-      <a id="org_url" href="." target="_blank"></a>
-      <br><br>
-      <a id="mp4_url" href="." target="_blank"></a>
-  </b>
+    <div class="container">
+      <video id="video" controls crossorigin playsinline>
+        <!-- <source src="" type="video/mp4"> -->
+        </video>
+      </div>
+
+      <b>
+        <a id="org_url" href="." target="_blank"></a>
+        <br><br>
+        <a id="mp4_url" href="." target="_blank"></a>
+      </b>
+  </center>
 
   <!-- partial -->
   <script

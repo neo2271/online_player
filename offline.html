@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta http-equiv="pragma" content="no-cache">
+  <title>Offline Files Player | www.minhtamgroup.org</title>
+  <link rel='shortcut icon' type='image/x-icon'
+    href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
+  <style>
+    @font-face {
+      font-family: segoeui;
+      src: url(https://cdn2.minhtamgroup.org/fonts/SEGOEUI.TTF);
+    }
+
+    * {
+      font-family: segoeui;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+
+<body>
+  <center>
+  <div id="message">Set <b><font color="red">PLAYBACK SPEED</font></b> before choosing file to play</div>
+  <br>
+
+  <b>Playback Speed: </b><input type="text" id="speed" name="speed" maxlength="9" size="6" style="font-weight: bold; text-align: center;">
+  <br>
+  <input type="file" accept="*" id="file"/>
+  <br><br>
+
+  <video controls autoplay id="video"></video>
+  </center>
+
+  <script src="./offline.js"></script>
+</body>
+
+</html>
