@@ -21,6 +21,8 @@ document.getElementById("speed").value  = parseFloat(1.0).toFixed(1);
             document.getElementById("speed").value  = parseFloat(speed).toFixed(1);
         }
 
+        var repeat = document.getElementById("cb_repeat").checked;
+
         // var videoNode = document.querySelector('#video');
         var videoNode = document.getElementById('video');
         var canPlay = videoNode.canPlayType(type);
@@ -40,6 +42,7 @@ document.getElementById("speed").value  = parseFloat(1.0).toFixed(1);
 
             videoNode.src = fileURL;
             videoNode.playbackRate = speed;
+            videoNode.loop = repeat;
         },
         inputNode = document.querySelector('#file');
 
