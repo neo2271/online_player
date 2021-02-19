@@ -22,6 +22,7 @@ document.getElementById("speed").value  = parseFloat(1.0).toFixed(1);
         }
 
         var repeat = document.getElementById("cb_repeat").checked;
+        // console.log("repeat: " + repeat);
 
         // var videoNode = document.querySelector('#video');
         var videoNode = document.getElementById('video');
