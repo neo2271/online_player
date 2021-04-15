@@ -24,6 +24,40 @@ function watch() {
     if (url.length < 1)
     {
         return;
+    } else
+    {
+        var video_id = "";
+        var str_pattern_video = "";
+        if ((queryString.indexOf("youtube.com") != -1 ) || (queryString.indexOf("youtu.be") != -1 )) // youtube.com or youtu.be in url
+        {
+            if (queryString.indexOf("youtube.com") != -1 )
+            {
+                str_pattern_video = "youtube.com/watch?v=";
+                video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
+            } else if (queryString.indexOf("youtu.be") != -1 )
+            {
+                str_pattern_video = "youtu.be/";
+                video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
+            }
+
+            if (video_id.length > 1)
+            {
+                document.getElementById("video").setAttribute("data-plyr-provider", "youtube");
+                document.getElementById("video").setAttribute("data-plyr-embed-id", video_id);
+            }
+            console.log("youtube video_id: " + video_id);
+        } else if (queryString.indexOf("vimeo") != -1 ) // vimeo.com in url
+        {
+            str_pattern_video = "vimeo.com/";
+            video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
+
+            if (video_id.length > 1)
+            {
+                document.getElementById("video").setAttribute("data-plyr-provider", "vimeo");
+                document.getElementById("video").setAttribute("data-plyr-embed-id", "video_id");
+            }
+            console.log("vimeo video_id: " + video_id);
+        }
     }
 
     repeat = document.getElementById("cb_repeat").checked;
@@ -32,7 +66,7 @@ function watch() {
     // Change the second argument to your options:
     // https://github.com/sampotts/plyr/#options
     // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
-    var player = new Plyr('video', {
+    var player = new Plyr('#video', {
         captions: {
             active: true,
             language: 'auto',
