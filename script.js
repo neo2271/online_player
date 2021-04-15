@@ -99,8 +99,11 @@ function update_ui_url() {
     document.getElementById("org_url").innerHTML = url;
     document.getElementById("org_url").href = url;
 
-    document.getElementById("mp4_url").innerHTML = new_url;
-    document.getElementById("mp4_url").href = new_url;
+    if (url.length > 1)
+    {
+        document.getElementById("mp4_url").innerHTML = new_url;
+        document.getElementById("mp4_url").href = new_url;
+    }
 
     document.getElementById("video").src = url;
     window.history.pushState({path:base_url},'',mp4_url);
