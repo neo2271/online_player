@@ -4,6 +4,11 @@ var queryString = window.location.search;
 // console.log(queryString);
 
 var repeat;
+var play_yt_vm = false;
+var played = false;
+
+var video_YT_obj = document.getElementById("video_YT");
+var video_obj = document.getElementById("video");
 
 var url = "";
 var new_url = "";
@@ -17,6 +22,8 @@ if (queryString.length > 0) {
     }
 }
 
+video_obj.style.display = 'none';
+
 update_ui_url();
 
 function watch() {
@@ -26,10 +33,23 @@ function watch() {
         return;
     } else
     {
+        repeat = document.getElementById("cb_repeat").checked;
+        console.log("repeat: " + repeat);
+
+        update_ui_url();
+        if (played == true)
+        {
+            location.reload();
+            played = false;
+        }
+
         var video_id = "";
         var str_pattern_video = "";
+
         if ((queryString.indexOf("youtube.com") != -1 ) || (queryString.indexOf("youtu.be") != -1 )) // youtube.com or youtu.be in url
         {
+            play_yt_vm = true;
+
             if (queryString.indexOf("youtube.com") != -1 )
             {
                 str_pattern_video = "youtube.com/watch?v=";
@@ -42,65 +62,108 @@ function watch() {
 
             if (video_id.length > 1)
             {
-                document.getElementById("video").setAttribute("data-plyr-provider", "youtube");
-                document.getElementById("video").setAttribute("data-plyr-embed-id", video_id);
+                video_YT_obj.setAttribute("data-plyr-provider", "youtube");
+                video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
             }
             console.log("youtube video_id: " + video_id);
         } else if (queryString.indexOf("vimeo") != -1 ) // vimeo.com in url
         {
+            play_yt_vm = true;
+
             str_pattern_video = "vimeo.com/";
             video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
 
             if (video_id.length > 1)
             {
-                document.getElementById("video").setAttribute("data-plyr-provider", "vimeo");
-                document.getElementById("video").setAttribute("data-plyr-embed-id", "video_id");
+                video_YT_obj.setAttribute("data-plyr-provider", "vimeo");
+                video_YT_obj.setAttribute("data-plyr-embed-id", "video_id");
             }
             console.log("vimeo video_id: " + video_id);
         }
     }
+    console.log("play_yt_vm: " + play_yt_vm);
 
-    repeat = document.getElementById("cb_repeat").checked;
-    // console.log("repeat: " + repeat);
+    if (play_yt_vm == false)
+    {
+        video_obj.style.display = 'block';
+        video_YT_obj.style.display = 'none';
 
-    // Change the second argument to your options:
-    // https://github.com/sampotts/plyr/#options
-    // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
-    var player = new Plyr('#video', {
-        captions: {
-            active: true,
-            language: 'auto',
-            },
-        loop: {
-            active: repeat,
-            },
-        controls: [
-            'play-large',
-            'restart',
-            'rewind',
-            'play',
-            'fast-forward',
-            'progress',
-            'current-time',
-            'duration',
-            'mute',
-            'volume',
-            'captions',
-            'settings',
-            'pip',
-            'airplay',
-            // 'download',
-            'fullscreen',
-            ],
-        autoplay: true,
-    });
-    // console.log(player);
+        // Change the second argument to your options:
+        // https://github.com/sampotts/plyr/#options
+        // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
+        var player = new Plyr('#video', {
+            captions: {
+                active: true,
+                language: 'auto',
+                },
+            loop: {
+                active: repeat,
+                },
+            controls: [
+                'play-large',
+                'restart',
+                'play',
+                'progress',
+                'current-time',
+                'duration',
+                'mute',
+                'volume',
+                'captions',
+                'settings',
+                'pip',
+                'airplay',
+                // 'download',
+                'fullscreen',
+                ],
+            autoplay: true,
+        });
+        // console.log(player);
 
-    // Expose player so it can be used from the console
-    window.player = player;
+        // Expose player so it can be used from the console
+        window.player = player;
+        player.play(); // Start playback
+        played = true;
+    } else
+    {
+        video_obj.style.display = 'none';
+        video_YT_obj.style.display = 'block';
 
-    update_ui_url();
-    player.play(); // Start playback
+        // Change the second argument to your options:
+        // https://github.com/sampotts/plyr/#options
+        // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
+        var player_YT = new Plyr('#video_YT', {
+            captions: {
+                active: true,
+                language: 'auto',
+                },
+            loop: {
+                active: repeat,
+                },
+            controls: [
+                'play-large',
+                'restart',
+                'play',
+                'progress',
+                'current-time',
+                'duration',
+                'mute',
+                'volume',
+                'captions',
+                'settings',
+                'pip',
+                'airplay',
+                // 'download',
+                'fullscreen',
+                ],
+            autoplay: true,
+        });
+        // console.log(player_YT);
+
+        // Expose player so it can be used from the console
+        window.player = player_YT;
+        player_YT.play(); // Start playback
+        played = true;
+    }
 }
 
 function update_ui_url() {
@@ -139,7 +202,7 @@ function update_ui_url() {
         document.getElementById("mp4_url").href = new_url;
     }
 
-    document.getElementById("video").src = url;
+    video_obj.src = url;
     window.history.pushState({path:base_url},'',mp4_url);
 }
 
