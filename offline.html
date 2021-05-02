@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <meta name="theme-color" content="#000000">
-  <meta http-equiv="pragma" content="no-cache">
-  <title>Offline Files Player | www.minhtamgroup.org</title>
-  <link rel='shortcut icon' type='image/x-icon'
-    href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
-  <style>
-    @font-face {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta http-equiv="pragma" content="no-cache">
+    <title>Offline Files Player | www.minhtamgroup.org</title>
+    <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
+    <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
+    <style>
+        @font-face {
       font-family: segoeui;
       src: url(https://cdn2.minhtamgroup.org/fonts/SEGOEUI.TTF);
     }
@@ -23,19 +23,30 @@
 </head>
 
 <body>
-  <center>
-  <div id="message">Set <b><font color="red">PLAYBACK SPEED</font></b> and <b><font color="forestgreen">REPEAT</font></b> before choosing file to play</div>
-  <br>
-  <b><font color="red">Playback Speed: </font></b><input type="text" id="speed" name="speed" maxlength="9" size="6" style="font-weight: bold; text-align: center;">
-  <input type="checkbox" id="cb_repeat" name="cb_repeat"><label for="cb_repeat"><b><font color="forestgreen"> Auto Repeat</font></b></label>
-  <br><br>
-  <input type="file" accept="*" id="file"/>
-  <br><br>
+    <center>
+        <a href="./index.html"><b>Online Files Player</b></a>
+        <br><br>
 
-  <video controls autoplay id="video"></video>
-  </center>
+        <div id="message">Set <b>
+                <font color="red">PLAYBACK SPEED</font>
+            </b> and <b>
+                <font color="forestgreen">REPEAT</font>
+            </b> before choosing file to play</div>
+        <br>
+        <b>
+            <font color="red">Playback Speed: </font>
+        </b><input type="text" id="speed" name="speed" maxlength="9" size="6" style="font-weight: bold; text-align: center;">
+        <input type="checkbox" id="cb_repeat" name="cb_repeat"><label for="cb_repeat"><b>
+                <font color="forestgreen"> Auto Repeat</font>
+            </b></label>
+        <br><br>
 
-  <script src="./offline.js"></script>
+        <input type="file" accept="*" id="file" />
+        <br><br>
+
+        <video controls autoplay id="video"></video>
+    </center>
+    <script src="./offline.js"></script>
 </body>
 
 </html>

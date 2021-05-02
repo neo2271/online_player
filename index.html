@@ -2,19 +2,19 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <meta name="theme-color" content="#000000">
-  <meta http-equiv="pragma" content="no-cache">
-  <title>Online Player | www.minhtamgroup.org</title>
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
-  <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
-  <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
-  <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
-  <link rel='stylesheet' href='https://cdn1.minhtamgroup.org/css/plyr.css'>
-  <link rel="stylesheet" href="./style.css">
-  <style>
-    @font-face {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta http-equiv="pragma" content="no-cache">
+    <title>Online Player | www.minhtamgroup.org</title>
+    <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
+    <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
+    <link rel='stylesheet' href='https://cdn1.minhtamgroup.org/css/plyr.css'>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        @font-face {
       font-family: segoeui;
       src: url(https://cdn2.minhtamgroup.org/fonts/SEGOEUI.TTF);
     }
@@ -27,40 +27,36 @@
 </head>
 
 <body>
-  <center>
-    <a href="./offline.html"><b>Offline Files Player</b></a>
-    <br><br>
-
-    <b>URL: </b><input type="text" id="url" name="url" style="width: 69%;">
-    <input type="checkbox" id="cb_repeat" name="cb_repeat"> <label for="cb_repeat"><b><font color="forestgreen"> Auto Repeat</font></b></label>
-    <br><br>
-    <button id="watchBtn" onclick="javascript:watch()"><b>PLAY</b></button>
-    <br>
-
-    <div class="container">
-        <div id="video_YT"></div>
-        <video id="video" controls crossorigin playsinline>
-        <!-- <video id="video" controls playsinline> -->
-            <!-- <source src="" type="video/mp4"> -->
-        </video>
-    </div>
-
-    <b>
-        <a id="org_url" href="." target="_blank"></a>
+    <center>
+        <a href="./offline.html"><b>Offline Files Player</b></a>
         <br><br>
-        <a id="mp4_url" href="." target="_blank"></a>
-    </b>
-    <br><br>
-  </center>
-
-  <!-- partial -->
-  <script
-    src='https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL'></script>
-  <script src='https://cdn1.minhtamgroup.org/js/plyr.min.js'></script>
-  <script src="./script.js"></script>
-
-
-  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9e1fa809b544eae9e3287071c75f03d"}'></script><!-- End Cloudflare Web Analytics -->
+        <b>URL: </b><input type="text" id="url" name="url" style="width: 69%;">
+        <input type="checkbox" id="cb_repeat" name="cb_repeat"> <label for="cb_repeat"><b>
+                <font color="forestgreen"> Auto Repeat</font>
+            </b></label>
+        <br><br>
+        <button id="watchBtn" onclick="javascript:watch()"><b>PLAY</b></button>
+        <br>
+        <div class="container">
+            <div id="video_YT"></div>
+            <video id="video" controls crossorigin playsinline>
+                <!-- <video id="video" controls playsinline> -->
+                <!-- <source src="" type="video/mp4"> -->
+            </video>
+        </div>
+        <b>
+            <a id="org_url" href="." target="_blank"></a>
+            <br><br>
+            <a id="mp4_url" href="." target="_blank"></a>
+        </b>
+        <br><br>
+    </center>
+    <!-- partial -->
+    <script src='https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL'></script>
+    <script src='https://cdn1.minhtamgroup.org/js/plyr.min.js'></script>
+    <script src="./script.js"></script>
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9e1fa809b544eae9e3287071c75f03d"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 
 </html>
