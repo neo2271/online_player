@@ -3,6 +3,7 @@ var base_url = window.location.origin;
 var queryString = window.location.search;
 // console.log(queryString);
 
+var new_init = true;
 var repeat;
 var play_yt_vm = false;
 var played = false;
@@ -41,6 +42,7 @@ function watch() {
         {
             location.reload();
             played = false;
+            new_init = true;
         }
 
         var video_id = "";
@@ -203,7 +205,11 @@ function update_ui_url() {
     }
 
     video_obj.src = url;
-    window.history.pushState({path:base_url},'',mp4_url);
+    if (new_init == true)
+    {
+        window.history.pushState({path:base_url},'',mp4_url);
+        new_init = false;
+    }
 }
 
 var input = document.getElementById("url");
