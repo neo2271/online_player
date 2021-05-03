@@ -3,8 +3,8 @@ var base_url = window.location.origin;
 var queryString = window.location.search;
 // console.log(queryString);
 
-var new_init = true;
-var repeat;
+var new_init = false;
+var repeat = false;
 var play_yt_vm = false;
 var played = false;
 
@@ -20,6 +20,7 @@ if (queryString.length > 0) {
     if (queryString.indexOf(str_pattern_loop) != -1 )
     {
         document.getElementById("cb_repeat").checked = true;
+        repeat = true;
     }
 }
 
@@ -34,6 +35,7 @@ function watch() {
         return;
     } else
     {
+        new_init = true;
         repeat = document.getElementById("cb_repeat").checked;
         console.log("repeat: " + repeat);
 
@@ -193,7 +195,7 @@ function update_ui_url() {
         new_url = new_url + str_pattern_loop;
     }
     new_url = new_url + "?url=" + url;
-    // console.log(new_url);
+    console.log(new_url);
 
     document.getElementById("org_url").innerHTML = url;
     document.getElementById("org_url").href = url;
