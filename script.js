@@ -26,7 +26,9 @@ var player_cfg = {
     controls: [
         'play-large',
         'restart',
+        'rewind',
         'play',
+        'fast-forward',
         'progress',
         'current-time',
         'duration',
@@ -36,10 +38,17 @@ var player_cfg = {
         'settings',
         'pip',
         'airplay',
-        // 'download',
+        'download',
         'fullscreen',
     ],
     autoplay: true,
+    clickToPlay: true,
+    keyboard: {
+        global: true
+    },
+    tooltips: {
+        controls: false, seek: true
+    },
 };
 
 if (queryString.length > 0) {
@@ -65,7 +74,8 @@ function watch() {
 
         update_ui_url();
         if (played == true) {
-            location.reload();
+            // location.reload();
+            window.location.href = new_url;
             played = false;
             new_init = true;
         }
@@ -170,7 +180,7 @@ function update_ui_url() {
 
     video_obj.src = url;
     if (new_init == true) {
-        window.history.pushState({ path: base_url }, '', mp4_url);
+        // window.history.pushState({ path: base_url }, '', mp4_url);
         new_init = false;
     }
 }
