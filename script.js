@@ -15,6 +15,14 @@ var url = "";
 var new_url = "";
 var str_pattern_loop = "?loop=true";
 
+if (queryString.length > 0) {
+    // console.log(queryString.indexOf(str_pattern_loop))
+    if (queryString.indexOf(str_pattern_loop) != -1) {
+        document.getElementById("cb_repeat").checked = true;
+        repeat = true;
+    }
+}
+
 var player_cfg = {
     captions: {
         active: true,
@@ -47,17 +55,12 @@ var player_cfg = {
         global: true
     },
     tooltips: {
-        controls: false, seek: true
+        controls: true,
+        seek: true
     },
+    hideControls: true,
+    settings: ['captions', 'quality', 'speed'],
 };
-
-if (queryString.length > 0) {
-    // console.log(queryString.indexOf(str_pattern_loop))
-    if (queryString.indexOf(str_pattern_loop) != -1) {
-        document.getElementById("cb_repeat").checked = true;
-        repeat = true;
-    }
-}
 
 video_obj.style.display = 'none';
 
@@ -109,7 +112,7 @@ function watch() {
 
             if (video_id.length > 1) {
                 video_YT_obj.setAttribute("data-plyr-provider", "vimeo");
-                video_YT_obj.setAttribute("data-plyr-embed-id", "video_id");
+                video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
             }
             console.log("vimeo video_id: " + video_id);
         }
@@ -123,7 +126,7 @@ function watch() {
         // Change the second argument to your options:
         // https://github.com/sampotts/plyr/#options
         // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
-        var player = new Plyr('#video', [player_cfg]);
+        var player = new Plyr('#video', player_cfg);
         // console.log(player);
 
         // Expose player so it can be used from the console
@@ -137,7 +140,7 @@ function watch() {
         // Change the second argument to your options:
         // https://github.com/sampotts/plyr/#options
         // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
-        var player_YT = new Plyr('#video_YT', [player_cfg]);
+        var player_YT = new Plyr('#video_YT', player_cfg);
         // console.log(player_YT);
 
         // Expose player so it can be used from the console
