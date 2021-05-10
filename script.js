@@ -69,6 +69,7 @@ update_ui_url();
 function watch() {
     url = document.getElementById("url").value;
     if (url.length < 1) {
+        alert("Please input URL of video before !!!")
         return;
     } else {
         new_init = true;
@@ -86,24 +87,25 @@ function watch() {
         var video_id = "";
         var str_pattern_video = "";
 
-        if ((queryString.indexOf("youtube.com") != -1) || (queryString.indexOf("youtu.be") != -1)) // youtube.com or youtu.be in url
+        if ((url.indexOf("youtube.com") != -1) || (url.indexOf("youtu.be") != -1)) // youtube.com or youtu.be in url
         {
             play_yt_vm = true;
 
-            if (queryString.indexOf("youtube.com") != -1) {
-                str_pattern_video = "youtube.com/watch?v=";
+            if (url.indexOf("youtube.com") != -1) {
+                str_pattern_video = "v=";
                 video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
-            } else if (queryString.indexOf("youtu.be") != -1) {
+            } else if (url.indexOf("youtu.be") != -1) {
                 str_pattern_video = "youtu.be/";
                 video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
             }
+            video_id = "&v=" + video_id;
 
             if (video_id.length > 1) {
                 video_YT_obj.setAttribute("data-plyr-provider", "youtube");
                 video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
             }
             console.log("youtube video_id: " + video_id);
-        } else if (queryString.indexOf("vimeo") != -1) // vimeo.com in url
+        } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
         {
             play_yt_vm = true;
 
