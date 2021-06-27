@@ -1,41 +1,40 @@
-document.getElementById("speed").value  = parseFloat(1.0).toFixed(1);
+document.getElementById("speed").value = parseFloat(1.0).toFixed(1);
 
 (function localFileVideoPlayerInit(win) {
     var URL = win.URL || win.webkitURL,
-    displayMessage = (function displayMessageInit() {
-        var node = document.querySelector('#message');
+        displayMessage = (function displayMessageInit() {
+            var node = document.querySelector('#message');
 
-        return function displayMessage(message, isError) {
-            node.innerHTML = message;
-            node.className = isError ? 'error' : 'info';
-        };
-    }()),
-    playSelectedFile = function playSelectedFileInit(event) {
-        var file = this.files[0];
-        var type = file.type;
+            return function displayMessage(message, isError) {
+                node.innerHTML = message;
+                node.className = isError ? 'error' : 'info';
+            };
+        }()),
+        playSelectedFile = function playSelectedFileInit(event) {
+            var file = this.files[0];
+            var type = file.type;
 
-        var speed =  parseFloat(document.getElementById("speed").value);
-        if (speed < 0)
-        {
-            speed = 1.0;
-            document.getElementById("speed").value  = parseFloat(speed).toFixed(1);
-        }
+            var speed = parseFloat(document.getElementById("speed").value);
+            if (speed < 0) {
+                speed = 1.0;
+                document.getElementById("speed").value = parseFloat(speed).toFixed(1);
+            }
 
-        var repeat = document.getElementById("cb_repeat").checked;
-        // console.log("repeat: " + repeat);
+            var repeat = document.getElementById("cb_repeat").checked;
+            // console.log("repeat: " + repeat);
 
-        // var videoNode = document.querySelector('#video');
-        var videoNode = document.getElementById('video');
-        var canPlay = videoNode.canPlayType(type);
+            // var videoNode = document.querySelector('#video');
+            var videoNode = document.getElementById('video');
+            var canPlay = videoNode.canPlayType(type);
 
-        canPlay = (canPlay === '' ? 'no' : canPlay);
+            canPlay = (canPlay === '' ? 'no' : canPlay);
 
-        var message = 'Can play type "' + type + '": ' + canPlay;
-        var isError = canPlay === 'no';
+            var message = 'Can play type "' + type + '": ' + canPlay;
+            var isError = canPlay === 'no';
 
-        displayMessage(message, isError);
+            displayMessage(message, isError);
 
-        if (isError) {
+            if (isError) {
                 return;
             }
 

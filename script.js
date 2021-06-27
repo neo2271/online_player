@@ -66,7 +66,7 @@ video_obj.style.display = 'none';
 
 update_ui_url();
 
-function watch() {
+function play() {
     url = document.getElementById("url").value;
     if (url.length < 1) {
         alert("Please input URL of video before !!!")
@@ -196,6 +196,6 @@ input.addEventListener("keyup", function(event) {
     // Number 13 is the "Enter" key on the keyboard
     if (event.keyCode === 13) {
         // Trigger the button element with a click
-        document.getElementById("watchBtn").click();
+        document.getElementById("playBtn").click();
     }
 });
