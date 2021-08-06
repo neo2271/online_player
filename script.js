@@ -77,7 +77,7 @@ function play() {
         console.log("repeat: " + repeat);
 
         update_ui_url();
-        if (played == true) {
+        if (played === true) {
             // location.reload();
             window.location.href = new_url;
             played = false;
@@ -121,7 +121,7 @@ function play() {
     }
     console.log("play_yt_vm: " + play_yt_vm);
 
-    if (play_yt_vm == false) {
+    if (play_yt_vm === false) {
         video_obj.style.display = 'block';
         video_YT_obj.style.display = 'none';
 
@@ -155,7 +155,7 @@ function play() {
 function update_ui_url() {
     if (url.length < 1) {
         url = queryString.substring(queryString.indexOf("http"));
-        if (url.length == -1) {
+        if (url.length === -1) {
             return;
         }
     }
@@ -169,10 +169,12 @@ function update_ui_url() {
     document.getElementById("url").value = url;
 
     new_url = base_url;
-    if (repeat == true) {
+    if (repeat === true) {
         new_url = new_url + str_pattern_loop;
+        new_url = new_url + "&url=" + url;
+    } else {
+        new_url = new_url + "?url=" + url;
     }
-    new_url = new_url + "?url=" + url;
     console.log(new_url);
 
     document.getElementById("org_url").innerHTML = url;
@@ -184,7 +186,7 @@ function update_ui_url() {
     }
 
     video_obj.src = url;
-    if (new_init == true) {
+    if (new_init === true) {
         // window.history.pushState({ path: base_url }, '', mp4_url);
         new_init = false;
     }
