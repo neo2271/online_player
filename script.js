@@ -117,6 +117,23 @@ function play() {
                 video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
             }
             console.log("vimeo video_id: " + video_id);
+        } else if (url.indexOf("soundcloud.com") != -1) // soundcloud.com in url
+        {
+            let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=soundcloud&url=" + url;
+            console.log("api_url: " + api_url);
+
+            $.getJSON(api_url).then(
+                function (data) {
+                    // console.log(data);
+                    let direct_link = data.direct_link;
+                    console.log("direct_link: " + direct_link);
+                    if (direct_link.length > 0) {
+                        // window.open("https://play.minhtamgroup.org/?url=" + direct_link, '_blank');
+                        document.getElementById("url").value = direct_link;
+                        video_obj.src = document.getElementById("url").value;
+                    }
+                }
+            );
         }
     }
     console.log("play_yt_vm: " + play_yt_vm);
@@ -194,7 +211,7 @@ function update_ui_url() {
 
 var input = document.getElementById("url");
 // Execute a function when the user releases a key on the keyboard
-input.addEventListener("keyup", function(event) {
+input.addEventListener("keyup", function (event) {
     // Number 13 is the "Enter" key on the keyboard
     if (event.keyCode === 13) {
         // Trigger the button element with a click
