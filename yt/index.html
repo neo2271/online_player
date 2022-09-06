@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta http-equiv="pragma" content="no-cache">
+  <title>Play YouTube Video&#39;s Audio Only</title>
+  <script src="/cdn-cgi/apps/head/4aQGo79wnurkKGDJ7nh1EhzR7Yc.js"></script>
+  <link rel='shortcut icon' type='image/x-icon'
+    href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
+  <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
+  <link rel='stylesheet' href='https://cdn1.minhtamgroup.org/css/plyr.css'>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    @font-face {
+      font-family: segoeui;
+      src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
+    }
+
+    * {
+      font-family: segoeui;
+      word-wrap: break-word;
+    }
+
+  </style>
+</head>
+
+<body>
+  <br>
+  <center>
+    <!-- partial:index.partial.html -->
+    <div id="YouTube" style="width:0px;height:0px"></div>
+    <div class="player" onclick="toggle_player()">
+      <div class="player-button" onclick="start_player();">
+        Play [<span class="duration">0:00</span>]
+      </div>
+    </div>
+    <!-- partial -->
+  </center>
+  <script src="./script.js"></script>
+
+</body>
+
+</html>
