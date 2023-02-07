@@ -105,6 +105,21 @@ function play() {
                 video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
             }
             console.log("youtube video_id: " + video_id);
+
+            let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=youtube&url=" + url;
+            console.log("api_url: " + api_url);
+            $.getJSON(api_url).then(
+                function (data) {
+                    // console.log(data);
+                    let direct_link = data.url;
+                    console.log("direct_link: " + direct_link);
+                    if (direct_link.length > 0) {
+                        // window.open(direct_link, '_blank');
+                        document.getElementById("direct_link").innerHTML = direct_link;
+                        document.getElementById("direct_link").href = direct_link;
+                    }
+                }
+            );
         } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
         {
             play_yt_vm = true;
@@ -129,8 +144,9 @@ function play() {
                     console.log("direct_link: " + direct_link);
                     if (direct_link.length > 0) {
                         // window.open("https://play.minhtamgroup.org/?url=" + direct_link, '_blank');
-                        document.getElementById("url").value = direct_link;
-                        video_obj.src = document.getElementById("url").value;
+                        video_obj.src = direct_link
+                        document.getElementById("direct_link").innerHTML = direct_link;
+                        document.getElementById("direct_link").href = direct_link;
                     }
                 }
             );
