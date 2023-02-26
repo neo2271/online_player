@@ -111,7 +111,8 @@ function play() {
             $.getJSON(api_url).then(
                 function (data) {
                     // console.log(data);
-                    let direct_link = data.url;
+                    // let direct_link = data.url;
+                    let direct_link = data["formats"]["audio/mp4"];
                     console.log("direct_link: " + direct_link);
                     if (direct_link.length > 0) {
                         // window.open(direct_link, '_blank');
