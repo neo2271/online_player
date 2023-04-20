@@ -121,6 +121,22 @@ function play() {
                     }
                 }
             );
+
+            api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
+            console.log("api_url: " + api_url);
+            $.getJSON(api_url).then(
+                function (data) {
+                    // console.log(data);
+                    // let direct_link = data.url;
+                    let direct_link = data["direct_link"];
+                    console.log("direct_link: " + direct_link);
+                    if (direct_link.length > 0) {
+                        // window.open(direct_link, '_blank');
+                        document.getElementById("direct_link_yt").innerHTML = direct_link;
+                        document.getElementById("direct_link_yt").href = direct_link;
+                    }
+                }
+            );
         } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
         {
             play_yt_vm = true;
