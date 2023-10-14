@@ -143,7 +143,23 @@ function get_direct_link() {
         }
         console.log("youtube video_id: " + video_id);
 
-        let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=youtube&url=" + url;
+        let api_url = "https://www.youtube.com/oembed?url=" + url + "&format=json";
+        console.log("api_url: " + api_url);
+        $.getJSON(api_url).then(
+            function (data) {
+                console.log(data);
+                let title = data["title"];
+                let author_name = data["author_name"];
+                let provider_name = data["provider_name"];
+                console.log(title + " | " + author_name);
+                if (title.length > 0 && author_name.length > 0) {
+                    document.title = title + " | " + author_name + " | " + provider_name + " - Online Player | www.minhtamgroup.org";
+                    document.getElementById("org_url").innerHTML = title + "<br/><br/>" + url;
+                }
+            }
+        );
+
+        api_url = "https://svl.minhtamgroup.org/api/v1/download?service=youtube&url=" + url;
         console.log("api_url: " + api_url);
         $.getJSON(api_url).then(
             function (data) {
