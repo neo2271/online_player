@@ -1,19 +1,19 @@
 // Additional script
-var base_url = window.location.origin;
-var queryString = window.location.search;
+let base_url = window.location.origin;
+let queryString = window.location.search;
 // console.log(queryString);
 
-var new_init = false;
-var repeat = false;
-var play_yt_vm = false;
-var played = false;
+let new_init = false;
+let repeat = false;
+let play_yt_vm = false;
+let played = false;
 
-var video_YT_obj = document.getElementById("video_YT");
-var video_obj = document.getElementById("video");
+let video_YT_obj = document.getElementById("video_YT");
+let video_obj = document.getElementById("video");
 
-var url = "";
-var new_url = "";
-var str_pattern_loop = "?loop=true";
+let url = "";
+let new_url = "";
+let str_pattern_loop = "?loop=true";
 
 if (queryString.length > 0) {
     // console.log(queryString.indexOf(str_pattern_loop))
@@ -23,7 +23,7 @@ if (queryString.length > 0) {
     }
 }
 
-var player_cfg = {
+let player_cfg = {
     captions: {
         active: true,
         language: 'auto',
@@ -65,6 +65,7 @@ var player_cfg = {
 video_obj.style.display = 'none';
 
 update_ui_url();
+get_direct_link();
 
 function play() {
     url = document.getElementById("url").value;
@@ -72,102 +73,7 @@ function play() {
         alert("Please input URL of video before !!!")
         return;
     } else {
-        new_init = true;
-        repeat = document.getElementById("cb_repeat").checked;
-        console.log("repeat: " + repeat);
-
-        update_ui_url();
-        if (played === true) {
-            // location.reload();
-            window.location.href = new_url;
-            played = false;
-            new_init = true;
-        }
-
-        var video_id = "";
-        var str_pattern_video = "";
-
-        if ((url.indexOf("youtube.com") != -1) || (url.indexOf("youtu.be") != -1)) // youtube.com or youtu.be in url
-        {
-            play_yt_vm = true;
-
-            if (url.indexOf("youtube.com") != -1) {
-                str_pattern_video = "v=";
-                video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
-            } else if (url.indexOf("youtu.be") != -1) {
-                str_pattern_video = "youtu.be/";
-                video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
-            }
-            video_id = "&v=" + video_id;
-
-            if (video_id.length > 1) {
-                video_YT_obj.setAttribute("data-plyr-provider", "youtube");
-                video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
-            }
-            console.log("youtube video_id: " + video_id);
-
-            let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=youtube&url=" + url;
-            console.log("api_url: " + api_url);
-            $.getJSON(api_url).then(
-                function (data) {
-                    // console.log(data);
-                    // let direct_link = data.url;
-                    let direct_link = data["direct_link"];
-                    console.log("direct_link: " + direct_link);
-                    if (direct_link.length > 0) {
-                        // window.open(direct_link, '_blank');
-                        document.getElementById("direct_link").innerHTML = direct_link;
-                        document.getElementById("direct_link").href = direct_link;
-                    }
-                }
-            );
-
-            api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
-            console.log("api_url: " + api_url);
-            $.getJSON(api_url).then(
-                function (data) {
-                    // console.log(data);
-                    // let direct_link = data.url;
-                    let direct_link = data["direct_link"];
-                    console.log("direct_link: " + direct_link);
-                    if (direct_link.length > 0) {
-                        // window.open(direct_link, '_blank');
-                        document.getElementById("direct_link_yt").innerHTML = direct_link;
-                        document.getElementById("direct_link_yt").href = direct_link;
-                    }
-                }
-            );
-        } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
-        {
-            play_yt_vm = true;
-
-            str_pattern_video = "vimeo.com/";
-            video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
-
-            if (video_id.length > 1) {
-                video_YT_obj.setAttribute("data-plyr-provider", "vimeo");
-                video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
-            }
-            console.log("vimeo video_id: " + video_id);
-        } else if (url.indexOf("soundcloud.com") != -1) // soundcloud.com in url
-        {
-            let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=soundcloud&url=" + url;
-            console.log("api_url: " + api_url);
-
-            $.getJSON(api_url).then(
-                function (data) {
-                    // console.log(data);
-                    let direct_link = data.direct_link;
-                    console.log("direct_link: " + direct_link);
-                    if (direct_link.length > 0) {
-                        // window.open("https://play.minhtamgroup.org/?url=" + direct_link, '_blank');
-                        video_obj.src = direct_link
-                        document.getElementById("direct_link").innerHTML = direct_link;
-                        document.getElementById("direct_link").href = direct_link;
-                    }
-                }
-            );
-        }
+        get_direct_link();
     }
     console.log("play_yt_vm: " + play_yt_vm);
 
@@ -178,7 +84,7 @@ function play() {
         // Change the second argument to your options:
         // https://github.com/sampotts/plyr/#options
         // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
-        var player = new Plyr('#video', player_cfg);
+        let player = new Plyr('#video', player_cfg);
         // console.log(player);
 
         // Expose player so it can be used from the console
@@ -192,7 +98,7 @@ function play() {
         // Change the second argument to your options:
         // https://github.com/sampotts/plyr/#options
         // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
-        var player_YT = new Plyr('#video_YT', player_cfg);
+        let player_YT = new Plyr('#video_YT', player_cfg);
         // console.log(player_YT);
 
         // Expose player so it can be used from the console
@@ -200,6 +106,106 @@ function play() {
         player_YT.play(); // Start playback
         played = true;
     }
+}
+
+function get_direct_link() {
+    new_init = true;
+    repeat = document.getElementById("cb_repeat").checked;
+    console.log("repeat: " + repeat);
+
+    update_ui_url();
+    if (played === true) {
+        // location.reload();
+        window.location.href = new_url;
+        played = false;
+        new_init = true;
+    }
+
+    let video_id = "";
+    let str_pattern_video = "";
+
+    if ((url.indexOf("youtube.com") != -1) || (url.indexOf("youtu.be") != -1)) // youtube.com or youtu.be in url
+    {
+        play_yt_vm = true;
+
+        if (url.indexOf("youtube.com") != -1) {
+            str_pattern_video = "v=";
+            video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
+        } else if (url.indexOf("youtu.be") != -1) {
+            str_pattern_video = "youtu.be/";
+            video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
+        }
+        video_id = "&v=" + video_id;
+
+        if (video_id.length > 1) {
+            video_YT_obj.setAttribute("data-plyr-provider", "youtube");
+            video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
+        }
+        console.log("youtube video_id: " + video_id);
+
+        let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=youtube&url=" + url;
+        console.log("api_url: " + api_url);
+        $.getJSON(api_url).then(
+            function (data) {
+                // console.log(data);
+                // let direct_link = data.url;
+                let direct_link = data["direct_link"];
+                console.log("direct_link: " + direct_link);
+                if (direct_link.length > 0) {
+                    // window.open(direct_link, '_blank');
+                    document.getElementById("direct_link").innerHTML = direct_link;
+                    document.getElementById("direct_link").href = direct_link;
+                }
+            }
+        );
+
+        api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
+        console.log("api_url: " + api_url);
+        $.getJSON(api_url).then(
+            function (data) {
+                // console.log(data);
+                // let direct_link = data.url;
+                let direct_link = data["direct_link"];
+                console.log("direct_link: " + direct_link);
+                if (direct_link.length > 0) {
+                    // window.open(direct_link, '_blank');
+                    document.getElementById("direct_link_yt").innerHTML = direct_link;
+                    document.getElementById("direct_link_yt").href = direct_link;
+                }
+            }
+        );
+    } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
+    {
+        play_yt_vm = true;
+
+        str_pattern_video = "vimeo.com/";
+        video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
+
+        if (video_id.length > 1) {
+            video_YT_obj.setAttribute("data-plyr-provider", "vimeo");
+            video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
+        }
+        console.log("vimeo video_id: " + video_id);
+    } else if (url.indexOf("soundcloud.com") != -1) // soundcloud.com in url
+    {
+        let api_url = "https://svl.minhtamgroup.org/api/v1/download?service=soundcloud&url=" + url;
+        console.log("api_url: " + api_url);
+
+        $.getJSON(api_url).then(
+            function (data) {
+                // console.log(data);
+                let direct_link = data.direct_link;
+                console.log("direct_link: " + direct_link);
+                if (direct_link.length > 0) {
+                    // window.open("https://play.minhtamgroup.org/?url=" + direct_link, '_blank');
+                    video_obj.src = direct_link
+                    document.getElementById("direct_link").innerHTML = direct_link;
+                    document.getElementById("direct_link").href = direct_link;
+                }
+            }
+        );
+    }
+
 }
 
 function update_ui_url() {
@@ -242,7 +248,7 @@ function update_ui_url() {
     }
 }
 
-var input = document.getElementById("url");
+let input = document.getElementById("url");
 // Execute a function when the user releases a key on the keyboard
 input.addEventListener("keyup", function (event) {
     // Number 13 is the "Enter" key on the keyboard
