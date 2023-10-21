@@ -13,6 +13,10 @@ document.getElementById("speed").value = parseFloat(1.0).toFixed(1);
         playSelectedFile = function playSelectedFileInit(event) {
             var file = this.files[0];
             var type = file.type;
+            console.log(file.name);
+            if (file.name.length > 0) {
+                document.title = file.name + " - Offline Files Player | www.minhtamgroup.org";
+            }
 
             var speed = parseFloat(document.getElementById("speed").value);
             if (speed < 0) {
