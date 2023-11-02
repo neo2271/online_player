@@ -153,8 +153,17 @@ function get_direct_link() {
                 let provider_name = data["provider_name"];
                 console.log(title + " | " + author_name);
                 if (title.length > 0 && author_name.length > 0) {
-                    document.title = title + " | " + author_name + " | " + provider_name + " - Online Player | www.minhtamgroup.org";
-                    document.getElementById("org_url").innerHTML = title + "<br/><br/>" + url;
+                    let api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/duration?url=" + url;
+                    console.log("api_url: " + api_url);
+                    $.getJSON(api_url).then(
+                        function (data) {
+                            console.log(data);
+                            let duration = data["duration"];
+                            console.log(duration);
+                            document.title = duration + " | " + title + " | " + author_name + " | " + provider_name + " - Online Player | www.minhtamgroup.org";
+                            document.getElementById("org_url").innerHTML = duration + " | " + title + " | " + author_name + "<br/><br/>" + url;
+                        }
+                    );
                 }
             }
         );
