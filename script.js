@@ -143,27 +143,22 @@ function get_direct_link() {
         }
         console.log("youtube video_id: " + video_id);
 
-        let api_url = "https://www.youtube.com/oembed?url=" + url + "&format=json";
+        let api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/info?url=" + url;
         console.log("api_url: " + api_url);
         $.getJSON(api_url).then(
             function (data) {
                 console.log(data);
                 let title = data["title"];
                 let author_name = data["author_name"];
-                let provider_name = data["provider_name"];
-                console.log(title + " | " + author_name);
+                let duration = data["duration"];
+                let viewCount = data["viewCount"];
+                let likeCount = data["likeCount"];
+                let favoriteCount = data["favoriteCount"];
+                let commentCount = data["commentCount"];
+                console.log(title + " | " + author_name + " | " + duration);
                 if (title.length > 0 && author_name.length > 0) {
-                    let api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/duration?url=" + url;
-                    console.log("api_url: " + api_url);
-                    $.getJSON(api_url).then(
-                        function (data) {
-                            console.log(data);
-                            let duration = data["duration"];
-                            console.log(duration);
-                            document.title = duration + " | " + title + " | " + author_name + " | " + provider_name + " - Online Player | www.minhtamgroup.org";
-                            document.getElementById("org_url").innerHTML = duration + " | " + title + " | " + author_name + "<br/><br/>" + url;
-                        }
-                    );
+                    document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | Online Player | www.minhtamgroup.org";
+                    document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + "<br/><br/>" + url;
                 }
             }
         );
