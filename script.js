@@ -268,12 +268,8 @@ function update_ui_url() {
     }
 }
 
-let input = document.getElementById("url");
-// Execute a function when the user releases a key on the keyboard
-input.addEventListener("keyup", function (event) {
-    // Number 13 is the "Enter" key on the keyboard
-    if (event.keyCode === 13) {
-        // Trigger the button element with a click
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
         document.getElementById("playBtn").click();
     }
 });
