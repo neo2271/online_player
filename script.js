@@ -163,7 +163,7 @@ function get_direct_link() {
             }
         );
 
-        api_url = "https://svl.minhtamgroup.org/api/v1/download?service=youtube&url=" + url;
+        api_url = "https://automate.vya.vn/api/v1/youtube/audio?url=" + url;
         console.log("api_url: " + api_url);
         $.getJSON(api_url).then(
             function (data) {
