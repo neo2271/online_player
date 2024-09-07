@@ -257,13 +257,13 @@ function update_ui_url() {
     document.getElementById("org_url").href = url;
 
     if (url.length > 1) {
+        window.history.pushState({}, '', new_url);
         document.getElementById("mp4_url").innerHTML = new_url;
         document.getElementById("mp4_url").href = new_url;
     }
 
     video_obj.src = url;
     if (new_init === true) {
-        // window.history.pushState({ path: base_url }, '', mp4_url);
         new_init = false;
     }
 }
