@@ -5,6 +5,7 @@ let queryString = window.location.search;
 
 let new_init = false;
 let repeat = false;
+let direct = false;
 let play_yt_vm = false;
 let played = false;
 
@@ -13,13 +14,18 @@ let video_obj = document.getElementById("video");
 
 let url = "";
 let new_url = "";
-let str_pattern_loop = "?loop=true";
+let str_pattern_loop = "&loop=true";
+let str_pattern_direct = "&direct=true";
 
 if (queryString.length > 0) {
     // console.log(queryString.indexOf(str_pattern_loop))
     if (queryString.indexOf(str_pattern_loop) != -1) {
         document.getElementById("cb_repeat").checked = true;
         repeat = true;
+    }
+    if (queryString.indexOf(str_pattern_direct) != -1) {
+        document.getElementById("cb_direct").checked = true;
+        direct = true;
     }
 }
 
@@ -111,7 +117,9 @@ function play() {
 function get_direct_link() {
     new_init = true;
     repeat = document.getElementById("cb_repeat").checked;
+    direct = document.getElementById("cb_direct").checked;
     console.log("repeat: " + repeat);
+    console.log("direct: " + direct);
 
     update_ui_url();
     if (played === true) {
@@ -163,37 +171,39 @@ function get_direct_link() {
             }
         );
 
-        api_url = "https://automate.vya.vn/api/v1/youtube/audio?url=" + url;
-        console.log("api_url: " + api_url);
-        $.getJSON(api_url).then(
-            function (data) {
-                // console.log(data);
-                // let direct_link = data.url;
-                let direct_link = data["direct_link"];
-                console.log("direct_link: " + direct_link);
-                if (direct_link.length > 0) {
-                    // window.open(direct_link, '_blank');
-                    document.getElementById("direct_link").innerHTML = direct_link;
-                    document.getElementById("direct_link").href = direct_link;
+        if (direct) {
+            api_url = "https://automate.vya.vn/api/v1/youtube/audio?url=" + url;
+            console.log("api_url: " + api_url);
+            $.getJSON(api_url).then(
+                function (data) {
+                    // console.log(data);
+                    // let direct_link = data.url;
+                    let direct_link = data["direct_link"];
+                    console.log("direct_link: " + direct_link);
+                    if (direct_link.length > 0) {
+                        // window.open(direct_link, '_blank');
+                        document.getElementById("direct_link").innerHTML = direct_link;
+                        document.getElementById("direct_link").href = direct_link;
+                    }
                 }
-            }
-        );
+            );
 
-        api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
-        console.log("api_url: " + api_url);
-        $.getJSON(api_url).then(
-            function (data) {
-                // console.log(data);
-                // let direct_link = data.url;
-                let direct_link = data["direct_link"];
-                console.log("direct_link: " + direct_link);
-                if (direct_link.length > 0) {
-                    // window.open(direct_link, '_blank');
-                    document.getElementById("direct_link_yt").innerHTML = direct_link;
-                    document.getElementById("direct_link_yt").href = direct_link;
+            api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
+            console.log("api_url: " + api_url);
+            $.getJSON(api_url).then(
+                function (data) {
+                    // console.log(data);
+                    // let direct_link = data.url;
+                    let direct_link = data["direct_link"];
+                    console.log("direct_link: " + direct_link);
+                    if (direct_link.length > 0) {
+                        // window.open(direct_link, '_blank');
+                        document.getElementById("direct_link_yt").innerHTML = direct_link;
+                        document.getElementById("direct_link_yt").href = direct_link;
+                    }
                 }
-            }
-        );
+            );
+        }
     } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
     {
         play_yt_vm = true;
@@ -245,11 +255,12 @@ function update_ui_url() {
     document.getElementById("url").value = url;
 
     new_url = base_url;
+    new_url = new_url + "?url=" + url;
     if (repeat === true) {
         new_url = new_url + str_pattern_loop;
-        new_url = new_url + "&url=" + url;
-    } else {
-        new_url = new_url + "?url=" + url;
+    }
+    if (direct === true) {
+        new_url = new_url + str_pattern_direct;
     }
     console.log(new_url);
 
