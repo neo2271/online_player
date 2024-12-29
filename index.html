@@ -32,13 +32,17 @@
         | <a href="./offline.html"><b>Offline Files Player</b></a>
         | <a href="./react-player/"><b>React Player</b></a>
         <br>
-        <b>URL: </b><input type="text" id="url" name="url" style="width: 69%;margin-top: 5px;">
-        <input type="checkbox" id="cb_repeat" name="cb_repeat"> <label for="cb_repeat"><b>
-                <font color="forestgreen"> Auto Repeat</font>
-            </b></label>
-            <input type="checkbox" id="cb_direct" name="cb_direct"> <label for="cb_direct"><b>
-                <font color="blue"> Direct Link</font>
-            </b></label>
+        <b>URL: </b><input type="text" id="url" name="url" style="width: 59%;margin-top: 5px;">
+
+        <input type="checkbox" id="cb_repeat" name="cb_repeat" title="Check to enable auto play">
+        <label for="cb_repeat" title="This enables auto playing">
+            <b><font color="forestgreen">Loop</font></b>
+        </label>
+        <input type="checkbox" id="cb_direct" name="cb_direct" title="Check to get direct link">
+        <label for="cb_direct" title="This enables getting direct link">
+            <b><font color="blue">Link</font></b>
+        </label>
+
         <br>
         <button id="playBtn" onclick="javascript:play()" style="margin-top: 5px;"><b>PLAY</b></button>
         <br>
