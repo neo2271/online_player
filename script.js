@@ -251,6 +251,9 @@ function update_ui_url() {
     if (url.indexOf(str_pattern_loop) != -1) {
         url = url.replace(str_pattern_loop, "");
     }
+    if (url.indexOf(str_pattern_direct) != -1) {
+        url = url.replace(str_pattern_direct, "");
+    }
     console.log(url);
 
     document.getElementById("url").value = url;
