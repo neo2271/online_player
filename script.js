@@ -172,7 +172,11 @@ function get_direct_link() {
         );
 
         if (direct) {
-            let SERVER_LIST = ["https://infringement-node-amount-km.trycloudflare.com", "https://act-profiles-just-developed.trycloudflare.com"];
+            let SERVER_LIST = [
+                "https://ordered-success-liable-belkin.trycloudflare.com",
+                "https://act-profiles-just-developed.trycloudflare.com",
+                "https://word-senate-success-announcements.trycloudflare.com",
+            ];
             api_url = SERVER_LIST[Math.floor(Math.random() * SERVER_LIST.length)] + "/api/v1/youtube/audio?url=" + url;
             console.log("api_url: " + api_url);
             $.getJSON(api_url).then(
