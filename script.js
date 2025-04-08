@@ -11,11 +11,14 @@ let played = false;
 
 let video_YT_obj = document.getElementById("video_YT");
 let video_obj = document.getElementById("video");
+let youtube_container = document.getElementById("youtubeContainer");
+let youtube_frame = document.getElementById("youtubeFrame");
 
 let url = "";
 let new_url = "";
 let str_pattern_loop = "&loop=true";
 let str_pattern_direct = "&direct=true";
+let yt_video_id = "";
 
 if (queryString.length > 0) {
     // console.log(queryString.indexOf(str_pattern_loop))
@@ -69,6 +72,7 @@ let player_cfg = {
 };
 
 video_obj.style.display = 'none';
+youtube_container.style.display = 'none';
 
 update_ui_url();
 get_direct_link();
@@ -143,13 +147,14 @@ function get_direct_link() {
             str_pattern_video = "youtu.be/";
             video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
         }
-        video_id = "&v=" + video_id;
+        console.log("youtube video_id: " + video_id);
 
         if (video_id.length > 1) {
+            yt_video_id = video_id;
+            video_id = "&v=" + video_id;
             video_YT_obj.setAttribute("data-plyr-provider", "youtube");
             video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
         }
-        console.log("youtube video_id: " + video_id);
 
         let api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/info?url=" + url;
         console.log("api_url: " + api_url);
@@ -279,6 +284,19 @@ function update_ui_url() {
     video_obj.src = url;
     if (new_init === true) {
         new_init = false;
+    }
+}
+
+function showEmbedYoutube() {
+    const checkbox = document.getElementById("cb_show_yt");
+
+    if (checkbox.checked) {
+        youtube_frame.src = `https://www.youtube.com/embed/${yt_video_id}`;
+        youtube_container.style.display = 'block';
+        // console.log("youtube_frame.src: " + youtube_frame.src);
+    } else {
+        youtube_frame.src = "";
+        youtube_container.style.display = "none";
     }
 }
 

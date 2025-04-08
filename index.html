@@ -23,6 +23,25 @@
       font-family: segoeui;
       word-wrap: break-word;
     }
+
+    #youtubeContainer {
+        margin-bottom: 20px;
+        display: none;
+        position: relative;
+        width: 86%;
+        padding-top: 48.4%; /* 16:9 ratio = 9/16 = 0.484 */
+        height: 0;
+        overflow: hidden;
+    }
+
+    #youtubeContainer iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
   </style>
 </head>
 
@@ -31,24 +50,28 @@
         <a href="./"><b>Online Player</b></a>
         | <a href="./offline.html"><b>Offline Files Player</b></a>
         | <a href="./react-player/"><b>React Player</b></a>
-        <br>
-        <b>URL: </b><input type="text" id="url" name="url" style="width: 39%;margin-top: 5px;">
+        <br><br>
 
         <input type="checkbox" id="cb_direct" name="cb_direct" title="Check to get direct link">
         <label for="cb_direct" title="This enables getting direct link">
             <b><font color="blue">Get link</font></b>
         </label>
 
-        <!-- <label><b><font color="purple"> | </font></b></label> -->
-
         <input type="checkbox" id="cb_repeat" name="cb_repeat" title="Check to enable auto play">
         <label for="cb_repeat" title="This enables auto playing">
             <b><font color="forestgreen">Repeat</font></b>
         </label>
 
+        <input type="checkbox" id="cb_show_yt" name="cb_show_yt" title="Check to show Youtube frame" onclick="showEmbedYoutube()" />
+        <label for="cb_show_yt" title="This enables showing Youtube embed video">
+            <b>Youtube</b>
+        </label>
         <br>
-        <button id="playBtn" onclick="javascript:play()" style="margin-top: 5px;"><b>PLAY</b></button>
+
+        <b>URL: </b><input type="text" id="url" name="url" style="width: 39%;margin-top: 5px;">
+        <button id="playBtn" onclick="javascript:play()" style="margin-top: 5px;padding-left: 18px;padding-right: 18px;"><b><font color="red">PLAY</font></b></button>
         <br>
+
         <div class="container">
             <div id="video_YT"></div>
             <video id="video" controls crossorigin playsinline>
@@ -66,6 +89,14 @@
             <a id="direct_link_yt" href="." target="_blank"></a>
         </b>
         <br><br>
+
+        <div id="youtubeContainer">
+            <iframe id="youtubeFrame" width="96%"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
     </center>
     <!-- partial -->
     <script src='https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL'></script>
