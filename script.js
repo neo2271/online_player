@@ -1,4 +1,19 @@
 // Additional script
+// Khai báo biến player toàn cục để quản lý instance Plyr
+window.player = null;
+
+function hideAllPlayers() {
+    // Destroy player hiện tại nếu có
+    if (window.player && typeof window.player.destroy === 'function') {
+        window.player.destroy();
+        window.player = null;
+    }
+    // Ẩn tất cả video
+    video_obj.style.display = 'none';
+    video_YT_obj.style.display = 'none';
+    // Xóa các phần tử .plyr khỏi DOM nếu còn sót lại
+    document.querySelectorAll('.plyr').forEach(function(el) { el.parentNode && el.parentNode.removeChild(el); });
+}
 let base_url = window.location.origin;
 let queryString = window.location.search;
 // console.log(queryString);
@@ -87,33 +102,21 @@ function play() {
     }
     console.log("play_yt_vm: " + play_yt_vm);
 
+
+    // Ẩn và destroy toàn bộ player trước khi tạo mới
+    hideAllPlayers();
+
     if (play_yt_vm === false) {
         video_obj.style.display = 'block';
-        video_YT_obj.style.display = 'none';
-
-        // Change the second argument to your options:
-        // https://github.com/sampotts/plyr/#options
-        // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
         let player = new Plyr('#video', player_cfg);
-        // console.log(player);
-
-        // Expose player so it can be used from the console
         window.player = player;
-        player.play(); // Start playback
+        player.play();
         played = true;
     } else {
-        video_obj.style.display = 'none';
         video_YT_obj.style.display = 'block';
-
-        // Change the second argument to your options:
-        // https://github.com/sampotts/plyr/#options
-        // https://github.com/sampotts/plyr/blob/master/src/js/config/defaults.js
         let player_YT = new Plyr('#video_YT', player_cfg);
-        // console.log(player_YT);
-
-        // Expose player so it can be used from the console
         window.player = player_YT;
-        player_YT.play(); // Start playback
+        player_YT.play();
         played = true;
     }
 }
@@ -291,12 +294,26 @@ function showEmbedYoutube() {
     const checkbox = document.getElementById("cb_show_yt");
 
     if (checkbox.checked) {
+        hideAllPlayers();
         youtube_frame.src = `https://www.youtube.com/embed/${yt_video_id}`;
         youtube_container.style.display = 'block';
-        // console.log("youtube_frame.src: " + youtube_frame.src);
     } else {
         youtube_frame.src = "";
         youtube_container.style.display = "none";
+        // Hiện lại video phù hợp
+        if (play_yt_vm === true) {
+            hideAllPlayers();
+            video_YT_obj.style.display = 'block';
+            let player_YT = new Plyr('#video_YT', player_cfg);
+            window.player = player_YT;
+            // player_YT.play();
+        } else {
+            hideAllPlayers();
+            video_obj.style.display = 'block';
+            let player = new Plyr('#video', player_cfg);
+            window.player = player;
+            // player.play();
+        }
     }
 }
 
