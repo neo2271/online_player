@@ -171,10 +171,17 @@ function get_direct_link() {
                 let likeCount = data["likeCount"];
                 let favoriteCount = data["favoriteCount"];
                 let commentCount = data["commentCount"];
+                let description = data["description"];
                 console.log(title + " | " + author_name + " | " + duration);
+
                 if (title.length > 0 && author_name.length > 0) {
                     document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | Online Player | www.minhtamgroup.org";
                     document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + "<br/><br/>" + url;
+                }
+
+                if (description.length > 0) {
+                    document.getElementById("video_description").style.display = "block";
+                    document.getElementById('video_description').innerHTML = description.replace(/\n/g, '<br>');
                 }
             }
         );
