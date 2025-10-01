@@ -143,6 +143,10 @@ function get_direct_link() {
     {
         play_yt_vm = true;
 
+        if (url.indexOf("/shorts/") != -1) {
+            url = url.replace("shorts/", "watch?v=");
+        }
+
         if (url.indexOf("youtube.com") != -1) {
             str_pattern_video = "v=";
             video_id = url.substring(url.indexOf(str_pattern_video) + str_pattern_video.length);
