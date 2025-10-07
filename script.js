@@ -12,7 +12,7 @@ function hideAllPlayers() {
     video_obj.style.display = 'none';
     video_YT_obj.style.display = 'none';
     // Xóa các phần tử .plyr khỏi DOM nếu còn sót lại
-    document.querySelectorAll('.plyr').forEach(function(el) { el.parentNode && el.parentNode.removeChild(el); });
+    document.querySelectorAll('.plyr').forEach(function (el) { el.parentNode && el.parentNode.removeChild(el); });
 }
 let base_url = window.location.origin;
 let queryString = window.location.search;
@@ -84,6 +84,14 @@ let player_cfg = {
     },
     hideControls: true,
     settings: ['captions', 'quality', 'speed'],
+    youtube: {
+        noCookie: false,
+        rel: 0,
+        showinfo: 0,
+        iv_load_policy: 3,
+        modestbranding: 1,
+        hl: 'vi'
+    }
 };
 
 video_obj.style.display = 'none';
