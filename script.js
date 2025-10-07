@@ -178,6 +178,7 @@ function get_direct_link() {
                 console.log(data);
                 let title = data["title"];
                 let author_name = data["author_name"];
+                let published_at = data["published_at"];
                 let duration = data["duration"];
                 let viewCount = data["viewCount"];
                 let likeCount = data["likeCount"];
@@ -187,8 +188,8 @@ function get_direct_link() {
                 console.log(title + " | " + author_name + " | " + duration);
 
                 if (title.length > 0 && author_name.length > 0) {
-                    document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | Online Player | www.minhtamgroup.org";
-                    document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + "<br/><br/>" + url;
+                    document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + published_at;
+                    document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + " | " + published_at + "<br/><br/>" + url;
                 }
 
                 if (description.length > 0) {
