@@ -16,7 +16,7 @@ function hideAllPlayers() {
 }
 let base_url = window.location.origin;
 let queryString = window.location.search;
-// console.log(queryString);
+console.log("queryString: " + queryString);
 
 let new_init = false;
 let repeat = false;
@@ -129,14 +129,14 @@ function play() {
     }
 }
 
-function get_direct_link() {
+function get_direct_link(info=true, init=true) {
     new_init = true;
     repeat = document.getElementById("cb_repeat").checked;
     direct = document.getElementById("cb_direct").checked;
     console.log("repeat: " + repeat);
     console.log("direct: " + direct);
 
-    update_ui_url();
+    update_ui_url(init);
     if (played === true) {
         // location.reload();
         window.location.href = new_url;
@@ -171,33 +171,38 @@ function get_direct_link() {
             video_YT_obj.setAttribute("data-plyr-embed-id", video_id);
         }
 
-        let api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/info?url=" + url;
-        console.log("api_url: " + api_url);
-        $.getJSON(api_url).then(
-            function (data) {
-                console.log(data);
-                let title = data["title"];
-                let author_name = data["author_name"];
-                let published_at = data["published_at"];
-                let duration = data["duration"];
-                let viewCount = data["viewCount"];
-                let likeCount = data["likeCount"];
-                let favoriteCount = data["favoriteCount"];
-                let commentCount = data["commentCount"];
-                let description = data["description"];
-                console.log(title + " | " + author_name + " | " + duration);
+        if (info === true) {
+            let api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/info?url=" + url;
+            console.log("api_url: " + api_url);
+            $.getJSON(api_url).then(
+                function (data) {
+                    console.log(data);
+                    let title = data["title"];
+                    let author_name = data["author_name"];
+                    let published_at = data["published_at"];
+                    let duration = data["duration"];
+                    let viewCount = data["viewCount"];
+                    let likeCount = data["likeCount"];
+                    let favoriteCount = data["favoriteCount"];
+                    let commentCount = data["commentCount"];
+                    let description = data["description"];
+                    console.log(title + " | " + author_name + " | " + duration);
 
-                if (title.length > 0 && author_name.length > 0) {
-                    document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + published_at;
-                    document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + " | " + published_at + "<br/><br/>" + url;
-                }
+                    if (title.length > 0 && author_name.length > 0) {
+                        document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + published_at;
+                        document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + " | " + published_at + "<br/><br/>" + url;
 
-                if (description.length > 0) {
-                    document.getElementById("video_description").style.display = "block";
-                    document.getElementById('video_description').innerHTML = description.replace(/\n/g, '<br>');
+                        // Update URL without reloading page
+                        window.history.pushState({}, '', window.location.href);
+                    }
+
+                    if (description.length > 0) {
+                        document.getElementById("video_description").style.display = "block";
+                        document.getElementById('video_description').innerHTML = description.replace(/\n/g, '<br>');
+                    }
                 }
-            }
-        );
+            );
+        }
 
         if (direct) {
             api_url = "https://dev-py-svl.minhtamgroup.org/api/v1/youtube/audio?url=" + url;
@@ -216,21 +221,21 @@ function get_direct_link() {
                 }
             );
 
-            api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
-            console.log("api_url: " + api_url);
-            $.getJSON(api_url).then(
-                function (data) {
-                    // console.log(data);
-                    // let direct_link = data.url;
-                    let direct_link = data["direct_link"];
-                    console.log("direct_link: " + direct_link);
-                    if (direct_link.length > 0) {
-                        // window.open(direct_link, '_blank');
-                        document.getElementById("direct_link_yt").innerHTML = direct_link;
-                        document.getElementById("direct_link_yt").href = direct_link;
-                    }
-                }
-            );
+            // api_url = "https://svl.minhtamgroup.org/api/v1/download?service=yt&url=" + url;
+            // console.log("api_url: " + api_url);
+            // $.getJSON(api_url).then(
+            //     function (data) {
+            //         // console.log(data);
+            //         // let direct_link = data.url;
+            //         let direct_link = data["direct_link"];
+            //         console.log("direct_link: " + direct_link);
+            //         if (direct_link.length > 0) {
+            //             // window.open(direct_link, '_blank');
+            //             document.getElementById("direct_link_yt").innerHTML = direct_link;
+            //             document.getElementById("direct_link_yt").href = direct_link;
+            //         }
+            //     }
+            // );
         }
     } else if (url.indexOf("vimeo") != -1) // vimeo.com in url
     {
@@ -263,13 +268,17 @@ function get_direct_link() {
             }
         );
     }
-
 }
 
-function update_ui_url() {
+function update_ui_url(init=true) {
+    console.log("url: " + url);
     if (url.length < 1) {
+        document.getElementById("cb_direct").disabled = true;
+        document.getElementById("cb_show_yt").disabled = true;
+
         url = queryString.substring(queryString.indexOf("http"));
-        if (url.length === -1) {
+        if (url.length === 0) {
+            console.log("Invalid URL");
             return;
         }
     }
@@ -295,8 +304,13 @@ function update_ui_url() {
     }
     console.log(new_url);
 
-    document.getElementById("org_url").innerHTML = url;
-    document.getElementById("org_url").href = url;
+    document.getElementById("cb_direct").disabled = false;
+    document.getElementById("cb_show_yt").disabled = false;
+
+    if (init === true) {
+        document.getElementById("org_url").innerHTML = url;
+        document.getElementById("org_url").href = url;
+    }
 
     if (url.length > 1) {
         window.history.pushState({}, '', new_url);
@@ -335,6 +349,34 @@ function showEmbedYoutube() {
             // player.play();
         }
     }
+}
+
+function showDirectLink() {
+    url = document.getElementById("url").value;
+    if (url.length < 1) {
+        return;
+    }
+
+    // Get current URL
+    let currentUrl = window.location.href;
+
+    const checkbox = document.getElementById("cb_direct");
+    if (checkbox.checked) {
+        // Add &direct=true if not exists
+        if (!currentUrl.includes(str_pattern_direct)) {
+            currentUrl += str_pattern_direct;
+            get_direct_link(info=false, init=false);
+        }
+    } else {
+        // Remove &direct=true if exists
+        currentUrl = currentUrl.replace(str_pattern_direct, '');
+        new_url = new_url.replace(str_pattern_direct, '');
+        document.getElementById("mp4_url").innerHTML = new_url;
+        document.getElementById("mp4_url").href = new_url;
+    }
+
+    // Update URL without reloading page
+    window.history.pushState({}, '', currentUrl);
 }
 
 document.addEventListener('keydown', function (event) {
