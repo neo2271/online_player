@@ -351,6 +351,34 @@ function showEmbedYoutube() {
     }
 }
 
+function selectRepeat() {
+    url = document.getElementById("url").value;
+    if (url.length < 1) {
+        return;
+    }
+
+    // Get current URL
+    let currentUrl = window.location.href;
+
+    const checkbox = document.getElementById("cb_repeat");
+    if (checkbox.checked) {
+        // Add &loop=true if not exists
+        if (!currentUrl.includes(str_pattern_loop)) {
+            currentUrl += str_pattern_loop;
+            new_url += str_pattern_loop;
+        }
+    } else {
+        // Remove &loop=true if exists
+        currentUrl = currentUrl.replace(str_pattern_loop, '');
+        new_url = new_url.replace(str_pattern_loop, '');
+    }
+    document.getElementById("mp4_url").innerHTML = new_url;
+    document.getElementById("mp4_url").href = new_url;
+
+    // Update URL without reloading page
+    window.history.pushState({}, '', currentUrl);
+}
+
 function showDirectLink() {
     url = document.getElementById("url").value;
     if (url.length < 1) {
