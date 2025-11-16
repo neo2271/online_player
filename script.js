@@ -127,9 +127,21 @@ function play() {
         player_YT.play();
         played = true;
     }
+
+    window.player.on('enterfullscreen', () => {
+        if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock("landscape").catch(() => { });
+        }
+    });
+
+    window.player.on('exitfullscreen', () => {
+        if (screen.orientation && screen.orientation.unlock) {
+            screen.orientation.unlock();
+        }
+    });
 }
 
-function get_direct_link(info=true, init=true) {
+function get_direct_link(info = true, init = true) {
     new_init = true;
     repeat = document.getElementById("cb_repeat").checked;
     direct = document.getElementById("cb_direct").checked;
@@ -270,7 +282,7 @@ function get_direct_link(info=true, init=true) {
     }
 }
 
-function update_ui_url(init=true) {
+function update_ui_url(init = true) {
     console.log("url: " + url);
     if (url.length < 1) {
         document.getElementById("cb_direct").disabled = true;
@@ -393,7 +405,7 @@ function showDirectLink() {
         // Add &direct=true if not exists
         if (!currentUrl.includes(str_pattern_direct)) {
             currentUrl += str_pattern_direct;
-            get_direct_link(info=false, init=false);
+            get_direct_link(info = false, init = false);
         }
     } else {
         // Remove &direct=true if exists
