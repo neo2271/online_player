@@ -68,8 +68,14 @@
             }
 
             #playBtn {
-                padding: 6px 16px;
+                padding: 3px 16px;
                 font-size: 18px;
+                vertical-align: middle;
+            }
+
+            #url {
+                vertical-align: middle;
+                width: 39%;
             }
 
             /* Bo góc cho video container */
@@ -112,19 +118,25 @@
 
     <body>
         <center>
-            <a href="./"><b>Online Player</b></a>
-            | <a href="./offline.html"><b>Offline Files Player</b></a> |
+            <a href="./offline.html"><b>Offline Files Player</b></a> |
             <a href="./react-player/"><b>React Player</b></a> <br /><br />
 
             <input
                 type="checkbox"
                 id="cb_direct"
                 name="cb_direct"
-                title="Check to get direct link"
+                title="Check to get direct audio link"
                 onclick="showDirectLink()"
+                style="vertical-align: middle"
             />
-            <label for="cb_direct" title="This enables getting direct link">
-                <b><font color="blue">Get link</font></b>
+            <label
+                for="cb_direct"
+                title="This enables getting direct audio link"
+            >
+                <i
+                    class="bi bi-file-music-fill"
+                    style="color: blue; font-size: 20px; vertical-align: middle"
+                ></i>
             </label>
 
             <input
@@ -133,9 +145,17 @@
                 name="cb_repeat"
                 title="Check to enable auto repeat"
                 onclick="selectRepeat()"
+                style="vertical-align: middle"
             />
             <label for="cb_repeat" title="This enables auto repeat">
-                <b><font color="forestgreen">Repeat</font></b>
+                <i
+                    class="bi bi-repeat"
+                    style="
+                        color: green;
+                        font-size: 20px;
+                        vertical-align: middle;
+                    "
+                ></i>
             </label>
 
             <input
@@ -144,24 +164,28 @@
                 name="cb_show_yt"
                 title="Check to show Youtube frame"
                 onclick="showEmbedYoutube()"
+                style="vertical-align: middle"
             />
             <label
                 for="cb_show_yt"
                 title="This enables showing Youtube embed video"
             >
-                <b>Youtube</b>
+                <i
+                    class="bi bi-youtube"
+                    style="color: red; font-size: 20px; vertical-align: middle"
+                ></i>
             </label>
             <br />
 
             <i
                 class="bi bi-link-45deg"
-                style="font-size: 18px; vertical-align: middle"
+                style="font-size: 22px; vertical-align: middle"
             ></i>
             <input
                 type="text"
                 id="url"
                 name="url"
-                style="width: 39%; margin-top: 5px"
+                style="width: 69%; margin-top: 5px"
             />
             <button
                 id="playBtn"
@@ -169,7 +193,10 @@
                 style="margin-top: 5px"
                 title="Play"
             >
-                <i class="bi bi-play-circle-fill" style="color: red"></i>
+                <i
+                    class="bi bi-play-btn"
+                    style="color: blue; font-size: 24px"
+                ></i>
             </button>
             <br />
 
