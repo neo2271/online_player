@@ -1,49 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta name="theme-color" content="#000000" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <title>Offline Files Player | www.minhtamgroup.org</title>
+        <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn1.minhtamgroup.org/css/normalize.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        />
+        <style>
+            @font-face {
+                font-family: segoeui;
+                src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta http-equiv="pragma" content="no-cache">
-    <title>Offline Files Player | www.minhtamgroup.org</title>
-    <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
-    <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
-    <style>
-        @font-face {
-      font-family: segoeui;
-      src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
-    }
+            * {
+                font-family: segoeui;
+                word-wrap: break-word;
+            }
 
-    * {
-      font-family: segoeui;
-      word-wrap: break-word;
-    }
-  </style>
-</head>
+            .speed-control {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+            }
 
-<body>
-    <center>
-        <a href="./index.html"><b>Online Files Player</b></a>
-        <br><br>
-        <div id="message">Set <b>
-                <font color="red">PLAYBACK SPEED</font>
-            </b> and <b>
-                <font color="forestgreen">REPEAT</font>
-            </b> before choosing file to play</div>
-        <br>
-        <b>
-            <font color="red">Playback Speed: </font>
-        </b><input type="text" id="speed" name="speed" maxlength="9" size="6" style="font-weight: bold; text-align: center;">
-        <input type="checkbox" id="cb_repeat" name="cb_repeat"><label for="cb_repeat"><b>
-                <font color="forestgreen"> Auto Repeat</font>
-            </b></label>
-        <br><br>
-        <input type="file" accept="*" id="file" />
-        <br><br>
-        <video controls autoplay id="video"></video>
-    </center>
-    <script src="./offline.js"></script>
-</body>
+            #speedSlider {
+                width: 200px;
+                cursor: pointer;
+            }
 
+            #speedValue {
+                font-weight: bold;
+                color: red;
+                min-width: 40px;
+                display: inline-block;
+            }
+
+            #resetBtn {
+                padding: 6px 12px;
+                cursor: pointer;
+                background-color: #6c757d;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-size: 14px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+            }
+
+            #resetBtn:hover {
+                background-color: #5a6268;
+            }
+
+            #resetBtn:active {
+                transform: scale(0.95);
+            }
+        </style>
+    </head>
+
+    <body>
+        <center>
+            <a href="./index.html"><b>Online Files Player</b></a>
+            <br /><br />
+            <div id="message">
+                Set
+                <b>
+                    <font color="red">PLAYBACK SPEED</font>
+                </b>
+                and
+                <b>
+                    <font color="forestgreen">REPEAT</font>
+                </b>
+                before choosing file to play
+            </div>
+            <br />
+            <div class="speed-control">
+                <b><font color="red">Playback Speed: </font></b>
+                <input
+                    type="range"
+                    id="speedSlider"
+                    min="0.25"
+                    max="3.0"
+                    step="0.25"
+                    value="1.0"
+                />
+                <span id="speedValue">1.0x</span>
+                <button
+                    id="resetBtn"
+                    class="btn btn-secondary btn-sm"
+                    title="Reset to 1.0x"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"
+                        />
+                        <path
+                            d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"
+                        />
+                    </svg>
+                </button>
+            </div>
+            <br />
+            <input type="checkbox" id="cb_repeat" name="cb_repeat" />
+            <label for="cb_repeat"
+                ><b>
+                    <font color="forestgreen"> Auto Repeat</font>
+                </b></label
+            >
+            <br /><br />
+            <input type="file" accept="*" id="file" />
+            <br /><br />
+            <video controls autoplay id="video"></video>
+        </center>
+        <script>
+            // Hàm để lưu cookie
+            function setCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie =
+                    name + "=" + (value || "") + expires + "; path=/";
+            }
+
+            // Hàm để đọc cookie
+            function getCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(";");
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == " ") c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0)
+                        return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            // Khởi tạo giá trị slider
+            const speedSlider = document.getElementById("speedSlider");
+            const speedValue = document.getElementById("speedValue");
+            const resetBtn = document.getElementById("resetBtn");
+
+            // Load speed từ cookie khi khởi động
+            var savedSpeed = getCookie("playbackSpeed");
+            if (savedSpeed) {
+                speedSlider.value = savedSpeed;
+                speedValue.textContent =
+                    parseFloat(savedSpeed).toFixed(2) + "x";
+            }
+
+            // Cập nhật hiển thị giá trị khi thay đổi slider
+            speedSlider.addEventListener("input", function () {
+                var speed = parseFloat(this.value);
+                speedValue.textContent = speed.toFixed(2) + "x";
+
+                // Lưu vào cookie (lưu trong 365 ngày)
+                setCookie("playbackSpeed", speed, 365);
+
+                // Cập nhật tốc độ video nếu đang phát
+                const videoNode = document.getElementById("video");
+                if (videoNode.src) {
+                    videoNode.playbackRate = speed;
+                }
+            });
+
+            // Reset speed về 1.0x
+            resetBtn.addEventListener("click", function () {
+                speedSlider.value = 1.0;
+                speedValue.textContent = "1.0x";
+
+                // Lưu vào cookie
+                setCookie("playbackSpeed", 1.0, 365);
+
+                // Cập nhật tốc độ video nếu đang phát
+                const videoNode = document.getElementById("video");
+                if (videoNode.src) {
+                    videoNode.playbackRate = 1.0;
+                }
+            });
+
+            (function localFileVideoPlayerInit(win) {
+                var URL = win.URL || win.webkitURL,
+                    displayMessage = (function displayMessageInit() {
+                        var node = document.querySelector("#message");
+
+                        return function displayMessage(message, isError) {
+                            node.innerHTML = message;
+                            node.className = isError ? "error" : "info";
+                        };
+                    })(),
+                    playSelectedFile = function playSelectedFileInit(event) {
+                        var file = this.files[0];
+                        var type = file.type;
+                        console.log(file.name);
+                        if (file.name.length > 0) {
+                            document.title =
+                                file.name +
+                                " - Offline Files Player | www.minhtamgroup.org";
+                        }
+
+                        var speed = parseFloat(speedSlider.value);
+                        if (speed < 0) {
+                            speed = 1.0;
+                            speedSlider.value = speed;
+                            speedValue.textContent = speed.toFixed(2) + "x";
+                        }
+
+                        var repeat =
+                            document.getElementById("cb_repeat").checked;
+
+                        var videoNode = document.getElementById("video");
+                        var canPlay = videoNode.canPlayType(type);
+
+                        canPlay = canPlay === "" ? "no" : canPlay;
+
+                        var message =
+                            'Can play type "' + type + '": ' + canPlay;
+                        var isError = canPlay === "no";
+
+                        displayMessage(message, isError);
+
+                        if (isError) {
+                            return;
+                        }
+
+                        var fileURL = URL.createObjectURL(file);
+
+                        videoNode.src = fileURL;
+                        videoNode.playbackRate = speed;
+                        videoNode.loop = repeat;
+
+                        // Hiển thị video khi bắt đầu phát
+                        videoNode.classList.add("playing");
+                    },
+                    inputNode = document.querySelector("#file");
+
+                if (!URL) {
+                    displayMessage("Your browser is not supported !!!", true);
+                    return;
+                }
+
+                inputNode.addEventListener("change", playSelectedFile, false);
+            })(window);
+        </script>
+    </body>
 </html>
