@@ -1,114 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta name="theme-color" content="#000000" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <title>Online Player | MTG</title>
+        <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="https://cdn1.minhtamgroup.org/icons/minhtam_500x500_black.png"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn1.minhtamgroup.org/css/boxicons.min.css"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn1.minhtamgroup.org/css/normalize.min.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn1.minhtamgroup.org/css/plyr.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        />
+        <link rel="stylesheet" href="./style.css" />
+        <style>
+            @font-face {
+                font-family: segoeui;
+                src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
+            }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <meta http-equiv="pragma" content="no-cache">
-    <title>Online Player | MTG</title>
-    <link rel='shortcut icon' type='image/x-icon' href="https://cdn1.minhtamgroup.org/icons/minhtam_500x500_black.png" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
-    <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
-    <link rel='stylesheet' href='https://cdn1.minhtamgroup.org/css/plyr.css'>
-    <link rel="stylesheet" href="./style.css">
-    <style>
-        @font-face {
-      font-family: segoeui;
-      src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
-    }
+            * {
+                font-family: segoeui;
+                word-wrap: break-word;
+            }
 
-    * {
-      font-family: segoeui;
-      word-wrap: break-word;
-    }
+            /* Bo góc cho inputs */
+            input[type="text"] {
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                padding: 6px 10px;
+            }
 
-    #youtubeContainer {
-        margin-bottom: 20px;
-        display: none;
-        position: relative;
-        width: 86%;
-        padding-top: 48.4%; /* 16:9 ratio = 9/16 = 0.484 */
-        height: 0;
-        overflow: hidden;
-    }
+            input[type="checkbox"] {
+                cursor: pointer;
+            }
 
-    #youtubeContainer iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-    }
-  </style>
-</head>
+            /* Bo góc cho buttons */
+            button {
+                border-radius: 4px;
+                border: 1px solid #ccc;
+                background-color: #f8f9fa;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
 
-<body>
-    <center>
-        <a href="./"><b>Online Player</b></a>
-        | <a href="./offline.html"><b>Offline Files Player</b></a>
-        | <a href="./react-player/"><b>React Player</b></a>
-        <br><br>
+            button:hover {
+                background-color: #e2e6ea;
+            }
 
-        <input type="checkbox" id="cb_direct" name="cb_direct" title="Check to get direct link" onclick="showDirectLink()">
-        <label for="cb_direct" title="This enables getting direct link">
-            <b><font color="blue">Get link</font></b>
-        </label>
+            #playBtn {
+                padding: 6px 16px;
+                font-size: 18px;
+            }
 
-        <input type="checkbox" id="cb_repeat" name="cb_repeat" title="Check to enable auto repeat" onclick="selectRepeat()" >
-        <label for="cb_repeat" title="This enables auto repeat">
-            <b><font color="forestgreen">Repeat</font></b>
-        </label>
+            /* Bo góc cho video container */
+            .container {
+                border-radius: 8px;
+                overflow: hidden;
+            }
 
-        <input type="checkbox" id="cb_show_yt" name="cb_show_yt" title="Check to show Youtube frame" onclick="showEmbedYoutube()" />
-        <label for="cb_show_yt" title="This enables showing Youtube embed video">
-            <b>Youtube</b>
-        </label>
-        <br>
+            #youtubeContainer {
+                margin-bottom: 20px;
+                display: none;
+                position: relative;
+                width: 86%;
+                padding-top: 48.4%;
+                height: 0;
+                overflow: hidden;
+                border-radius: 8px;
+            }
 
-        <b>URL: </b><input type="text" id="url" name="url" style="width: 39%;margin-top: 5px;">
-        <button id="playBtn" onclick="javascript:play()" style="margin-top: 5px;padding-left: 18px;padding-right: 18px;"><b><font color="red">PLAY</font></b></button>
-        <br>
+            #youtubeContainer iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }
 
-        <div class="container">
-            <div id="video_YT"></div>
-            <video id="video" controls crossorigin playsinline>
-                <!-- <video id="video" controls playsinline> -->
-                <!-- <source src="" type="video/mp4"> -->
-            </video>
-        </div>
+            /* Bo góc cho video description */
+            #video_description {
+                border-radius: 6px;
+            }
 
-        <div id="youtubeContainer">
-            <iframe id="youtubeFrame" width="96%"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
+            label {
+                cursor: pointer;
+                margin-right: 15px;
+            }
+        </style>
+    </head>
 
-        <b>
-            <a id="org_url" href="." target="_blank"></a>
-            <br><br>
-            <a id="mp4_url" href="." target="_blank"></a>
-            <br>
-        </b>
-        <div id="video_description" style="width: 86%; margin: 10px auto; max-height: 390px; overflow-y: auto; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9; text-align: left; display: none"></div>
-        <b>
-            <br>
-            <a id="direct_link" href="." target="_blank"></a>
-            <br><br>
-            <a id="direct_link_yt" href="." target="_blank"></a>
-        </b>
-    </center>
-    <!-- partial -->
-    <script src='https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL'></script>
-    <script src='https://cdn1.minhtamgroup.org/js/plyr.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="./script.js"></script>
-    <!-- Cloudflare Web Analytics -->
-    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "a9e1fa809b544eae9e3287071c75f03d"}'></script><!-- End Cloudflare Web Analytics -->
-</body>
+    <body>
+        <center>
+            <a href="./"><b>Online Player</b></a>
+            | <a href="./offline.html"><b>Offline Files Player</b></a> |
+            <a href="./react-player/"><b>React Player</b></a> <br /><br />
 
+            <input
+                type="checkbox"
+                id="cb_direct"
+                name="cb_direct"
+                title="Check to get direct link"
+                onclick="showDirectLink()"
+            />
+            <label for="cb_direct" title="This enables getting direct link">
+                <b><font color="blue">Get link</font></b>
+            </label>
+
+            <input
+                type="checkbox"
+                id="cb_repeat"
+                name="cb_repeat"
+                title="Check to enable auto repeat"
+                onclick="selectRepeat()"
+            />
+            <label for="cb_repeat" title="This enables auto repeat">
+                <b><font color="forestgreen">Repeat</font></b>
+            </label>
+
+            <input
+                type="checkbox"
+                id="cb_show_yt"
+                name="cb_show_yt"
+                title="Check to show Youtube frame"
+                onclick="showEmbedYoutube()"
+            />
+            <label
+                for="cb_show_yt"
+                title="This enables showing Youtube embed video"
+            >
+                <b>Youtube</b>
+            </label>
+            <br />
+
+            <i
+                class="bi bi-link-45deg"
+                style="font-size: 18px; vertical-align: middle"
+            ></i>
+            <input
+                type="text"
+                id="url"
+                name="url"
+                style="width: 39%; margin-top: 5px"
+            />
+            <button
+                id="playBtn"
+                onclick="javascript:play()"
+                style="margin-top: 5px"
+                title="Play"
+            >
+                <i class="bi bi-play-circle-fill" style="color: red"></i>
+            </button>
+            <br />
+
+            <div class="container">
+                <div id="video_YT"></div>
+                <video id="video" controls crossorigin playsinline></video>
+            </div>
+
+            <div id="youtubeContainer">
+                <iframe
+                    id="youtubeFrame"
+                    width="96%"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                >
+                </iframe>
+            </div>
+
+            <b>
+                <a id="org_url" href="." target="_blank"></a>
+                <br /><br />
+                <a id="mp4_url" href="." target="_blank"></a>
+                <br />
+            </b>
+            <div
+                id="video_description"
+                style="
+                    width: 86%;
+                    margin: 10px auto;
+                    max-height: 390px;
+                    overflow-y: auto;
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    background-color: #f9f9f9;
+                    text-align: left;
+                    display: none;
+                "
+            ></div>
+            <b>
+                <br />
+                <a id="direct_link" href="." target="_blank"></a>
+                <br /><br />
+                <a id="direct_link_yt" href="." target="_blank"></a>
+            </b>
+        </center>
+        <script src="https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL"></script>
+        <script src="https://cdn1.minhtamgroup.org/js/plyr.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="./script.js"></script>
+        <!-- Cloudflare Web Analytics -->
+        <script
+            defer
+            src="https://static.cloudflareinsights.com/beacon.min.js"
+            data-cf-beacon='{"token": "a9e1fa809b544eae9e3287071c75f03d"}'
+        ></script>
+    </body>
 </html>
