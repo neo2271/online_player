@@ -141,7 +141,7 @@ function play() {
     });
 }
 
-function get_direct_link(info = true, init = true) {
+function get_direct_link(info = true, init = true, fromDirectLink = false) {
     new_init = true;
     repeat = document.getElementById("cb_repeat").checked;
     direct = document.getElementById("cb_direct").checked;
@@ -149,12 +149,13 @@ function get_direct_link(info = true, init = true) {
     console.log("direct: " + direct);
 
     update_ui_url(init);
-    if (played === true) {
-        // location.reload();
-        window.location.href = new_url;
-        played = false;
-        new_init = true;
-    }
+        // Nếu gọi từ showDirectLink thì không reload trang
+        if (!fromDirectLink && played === true) {
+            // location.reload();
+            window.location.href = new_url;
+            played = false;
+            new_init = true;
+        }
 
     let video_id = "";
     let str_pattern_video = "";
@@ -399,18 +400,23 @@ function showDirectLink() {
 
     // Get current URL
     let currentUrl = window.location.href;
-
     const checkbox = document.getElementById("cb_direct");
     if (checkbox.checked) {
         // Add &direct=true if not exists
         if (!currentUrl.includes(str_pattern_direct)) {
             currentUrl += str_pattern_direct;
-            get_direct_link(info = false, init = false);
+            // Chỉ cập nhật link trực tiếp, không reload trang
+            direct = true;
+            update_ui_url(false);
+            // Gọi API lấy direct link nếu cần
+                get_direct_link(false, false, true);
         }
     } else {
         // Remove &direct=true if exists
         currentUrl = currentUrl.replace(str_pattern_direct, '');
         new_url = new_url.replace(str_pattern_direct, '');
+        direct = false;
+        update_ui_url(false);
         document.getElementById("mp4_url").innerHTML = new_url;
         document.getElementById("mp4_url").href = new_url;
     }
