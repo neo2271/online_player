@@ -139,6 +139,13 @@ function play() {
             screen.orientation.unlock();
         }
     });
+
+    // Đảm bảo video sẽ tự động play lại nếu cb_repeat được bật
+    window.player.on('ended', () => {
+        if (document.getElementById("cb_repeat").checked) {
+            window.player.play();
+        }
+    });
 }
 
 function get_direct_link(info = true, init = true, fromDirectLink = false) {
@@ -387,6 +394,18 @@ function selectRepeat() {
     }
     document.getElementById("mp4_url").innerHTML = new_url;
     document.getElementById("mp4_url").href = new_url;
+
+    // Nếu player đang phát thì cập nhật loop trực tiếp
+    if (window.player) {
+        window.player.loop = { active: checkbox.checked };
+        // Đảm bảo event ended luôn được gắn
+        window.player.off('ended');
+        window.player.on('ended', () => {
+            if (checkbox.checked) {
+                window.player.play();
+            }
+        });
+    }
 
     // Update URL without reloading page
     window.history.pushState({}, '', currentUrl);
