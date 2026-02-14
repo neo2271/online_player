@@ -45,6 +45,11 @@ if (queryString.length > 0) {
         document.getElementById("cb_direct").checked = true;
         direct = true;
     }
+
+    url = queryString.substring(queryString.indexOf("http"));
+    if (url.length > 0) {
+        clearBtn.style.display = 'block';
+    }
 }
 
 let player_cfg = {
@@ -443,6 +448,23 @@ function showDirectLink() {
     // Update URL without reloading page
     window.history.pushState({}, '', currentUrl);
 }
+
+// Hàm clear URL
+function clearUrl() {
+    document.getElementById('url').value = '';
+    document.getElementById('clearBtn').style.display = 'none';
+    document.getElementById('url').focus();
+}
+
+// Hiển thị/ẩn nút clear khi có text
+document.getElementById('url').addEventListener('input', function() {
+    const clearBtn = document.getElementById('clearBtn');
+    if (this.value.length > 0) {
+        clearBtn.style.display = 'block';
+    } else {
+        clearBtn.style.display = 'none';
+    }
+});
 
 document.addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {

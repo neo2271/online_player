@@ -183,23 +183,48 @@
                 class="bi bi-link-45deg"
                 style="font-size: 22px; vertical-align: middle"
             ></i>
-            <input
-                type="text"
-                id="url"
-                name="url"
-                style="width: 45%; margin-top: 5px"
-            />
-            <button
-                id="playBtn"
-                onclick="javascript:play()"
-                style="margin-top: 5px"
-                title="Play"
-            >
-                <i
-                    class="bi bi-play-btn"
-                    style="color: blue; font-size: 24px"
-                ></i>
-            </button>
+                <div style="position: relative; display: inline-block;">
+                    <input
+                        type="text"
+                        id="url"
+                        name="url"
+                        style="width: 82%; padding-right: 30px; margin-top: 5px;"
+                    />
+                    <button
+                        id="clearBtn"
+                        onclick="clearUrl()"
+                        style="
+                            position: absolute;
+                            right: 8px;
+                            top: 55%;
+                            transform: translateY(-50%);
+                            background: transparent;
+                            border: none;
+                            cursor: pointer;
+                            padding: 2px;
+                            display: none;
+                            font-size: 16px;
+                            color: #999;
+                            line-height: 1;
+                        "
+                        title="Clear"
+                        type="button"
+                    >
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+                <button
+                    id="playBtn"
+                    onclick="javascript:play()"
+                    style="margin-top: 5px; margin-left: 5px;"
+                    title="Play"
+                >
+                    <i
+                        class="bi bi-play-btn"
+                        style="color: blue; font-size: 24px"
+                    ></i>
+                </button>
+            </div>
             <br />
 
             <div class="container">
