@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -11,10 +11,16 @@
             type="image/x-icon"
             href="https://cdn1.minhtamgroup.org/icons/minhtam_500x500_black.png"
         />
-        <link
-            href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700"
-            rel="stylesheet"
-        />
+
+        <!-- Apply theme BEFORE CSS loads -->
+        <script>
+            (function () {
+                const theme = localStorage.getItem("theme") || "light";
+                document.documentElement.setAttribute("data-theme", theme);
+            })();
+        </script>
+
+        <!-- Base CSS -->
         <link
             href="https://cdn1.minhtamgroup.org/css/boxicons.min.css"
             rel="stylesheet"
@@ -32,37 +38,112 @@
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
         />
         <link rel="stylesheet" href="./style.css" />
+
+        <!-- Theme Styles -->
         <style>
             @font-face {
                 font-family: segoeui;
                 src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
             }
-
             * {
                 font-family: segoeui;
                 word-wrap: break-word;
             }
 
-            /* Bo góc cho inputs */
-            input[type="text"] {
-                border-radius: 4px;
-                border: 1px solid #ccc;
-                padding: 6px 10px;
+            /* Light theme variables */
+            :root {
+                --bg-color: #ffffff;
+                --text-color: #000000;
+                --toggle-bg: #f8f9fa;
+                --toggle-border: #ccc;
+
+                --icon-color-main: blue;
+                --icon-color-success: green;
+                --icon-color-youtube: red;
+                --icon-color-neutral: #999;
+
+                /* Link colors */
+                --link-color: #0066cc;
+                --link-hover-color: #004999;
             }
 
+            /* Dark theme variables */
+            [data-theme="dark"] {
+                --bg-color: #0d1117;
+                --text-color: #c9d1d9;
+                --toggle-bg: #21262d;
+                --toggle-border: #30363d;
+
+                --icon-color-main: #4da3ff;
+                --icon-color-success: #7ee787;
+                --icon-color-youtube: #ff7777;
+                --icon-color-neutral: #aaaaaa;
+
+                /* Link colors for dark mode */
+                --link-color: #58a6ff;
+                --link-hover-color: #339cff;
+            }
+
+            a {
+                color: var(--link-color);
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            a:hover {
+                color: var(--link-hover-color);
+                text-decoration: underline;
+            }
+
+            html,
+            body {
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                transition:
+                    background-color 0.3s,
+                    color 0.3s;
+            }
+
+            /* Theme toggle button */
+            .theme-toggle {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                z-index: 1000;
+                cursor: pointer;
+                padding: 6px 8px;
+                border-radius: 6px;
+                background: var(--toggle-bg);
+                border: 1px solid var(--toggle-border);
+                font-size: 16px;
+                color: var(--text-color);
+            }
+            .theme-toggle:hover {
+                opacity: 0.8;
+            }
+            .theme-toggle:active {
+                transform: scale(0.95);
+            }
+
+            /* Inputs & buttons */
+            input[type="text"] {
+                border-radius: 4px;
+                border: 1px solid var(--toggle-border);
+                padding: 6px 10px;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+            }
             input[type="checkbox"] {
                 cursor: pointer;
             }
-
-            /* Bo góc cho buttons */
             button {
                 border-radius: 4px;
-                border: 1px solid #ccc;
-                background-color: #f8f9fa;
+                border: 1px solid var(--toggle-border);
+                background-color: var(--toggle-bg);
+                color: var(--text-color);
                 cursor: pointer;
                 transition: all 0.2s;
             }
-
             button:hover {
                 background-color: #e2e6ea;
             }
@@ -72,18 +153,17 @@
                 font-size: 18px;
                 vertical-align: middle;
             }
-
             #url {
                 vertical-align: middle;
                 width: 39%;
             }
 
-            /* Bo góc cho video container */
+            /* Video container */
             .container {
                 border-radius: 8px;
                 overflow: hidden;
+                background-color: var(--bg-color);
             }
-
             #youtubeContainer {
                 margin-bottom: 20px;
                 display: none;
@@ -93,8 +173,8 @@
                 height: 0;
                 overflow: hidden;
                 border-radius: 8px;
+                background-color: var(--bg-color);
             }
-
             #youtubeContainer iframe {
                 position: absolute;
                 top: 0;
@@ -104,128 +184,135 @@
                 border: 0;
             }
 
-            /* Bo góc cho video description */
+            /* Video description */
             #video_description {
                 border-radius: 6px;
+                background-color: var(--bg-color);
+                color: var(--text-color);
+                border: 1px solid var(--toggle-border);
             }
 
             label {
                 cursor: pointer;
                 margin-right: 15px;
+                color: var(--text-color);
+            }
+
+            /* Icon theme colors */
+            .icon-main {
+                color: var(--icon-color-main);
+            }
+            .icon-success {
+                color: var(--icon-color-success);
+            }
+            .icon-youtube {
+                color: var(--icon-color-youtube);
+            }
+            .icon-neutral {
+                color: var(--icon-color-neutral);
             }
         </style>
     </head>
-
     <body>
+        <!-- Theme toggle button -->
+        <button
+            class="theme-toggle"
+            id="theme-toggle"
+            aria-label="Toggle dark mode"
+        >
+            <span class="theme-icon">🌙</span>
+        </button>
+
         <center>
             <div style="margin-bottom: 10px">
                 <a href="./offline.html"><b>Offline Files Player</b></a> |
                 <a href="./react-player/"><b>React Player</b></a>
             </div>
 
+            <!-- Icons now use classes instead of hard color -->
             <input
                 type="checkbox"
                 id="cb_direct"
-                name="cb_direct"
-                title="Check to get direct audio link"
                 onclick="showDirectLink()"
                 style="vertical-align: middle"
             />
-            <label
-                for="cb_direct"
-                title="This enables getting direct audio link"
-            >
+            <label for="cb_direct" title="Direct audio link">
                 <i
-                    class="bi bi-file-music-fill"
-                    style="color: blue; font-size: 20px; vertical-align: middle"
+                    class="bi bi-file-music-fill icon-main"
+                    style="font-size: 20px; vertical-align: middle"
                 ></i>
             </label>
 
             <input
                 type="checkbox"
                 id="cb_repeat"
-                name="cb_repeat"
-                title="Check to enable auto repeat"
                 onclick="selectRepeat()"
                 style="vertical-align: middle"
             />
-            <label for="cb_repeat" title="This enables auto repeat">
+            <label for="cb_repeat" title="Auto repeat">
                 <i
-                    class="bi bi-repeat"
-                    style="
-                        color: green;
-                        font-size: 20px;
-                        vertical-align: middle;
-                    "
+                    class="bi bi-repeat icon-success"
+                    style="font-size: 20px; vertical-align: middle"
                 ></i>
             </label>
 
             <input
                 type="checkbox"
                 id="cb_show_yt"
-                name="cb_show_yt"
-                title="Check to show Youtube frame"
                 onclick="showEmbedYoutube()"
                 style="vertical-align: middle"
             />
-            <label
-                for="cb_show_yt"
-                title="This enables showing Youtube embed video"
-            >
+            <label for="cb_show_yt" title="Show Youtube embed">
                 <i
-                    class="bi bi-youtube"
-                    style="color: red; font-size: 20px; vertical-align: middle"
+                    class="bi bi-youtube icon-youtube"
+                    style="font-size: 20px; vertical-align: middle"
                 ></i>
             </label>
-            <br />
 
+            <br />
             <i
-                class="bi bi-link-45deg"
+                class="bi bi-link-45deg icon-neutral"
                 style="font-size: 22px; vertical-align: middle"
             ></i>
-                <div style="position: relative; display: inline-block;">
-                    <input
-                        type="text"
-                        id="url"
-                        name="url"
-                        style="width: 82%; padding-right: 30px; margin-top: 5px;"
-                    />
-                    <button
-                        id="clearBtn"
-                        onclick="clearUrl()"
-                        style="
-                            position: absolute;
-                            right: 8px;
-                            top: 55%;
-                            transform: translateY(-50%);
-                            background: transparent;
-                            border: none;
-                            cursor: pointer;
-                            padding: 2px;
-                            display: none;
-                            font-size: 16px;
-                            color: #999;
-                            line-height: 1;
-                        "
-                        title="Clear"
-                        type="button"
-                    >
-                        <i class="bi bi-x-circle-fill"></i>
-                    </button>
-                </div>
+
+            <div style="position: relative; display: inline-block">
+                <input
+                    type="text"
+                    id="url"
+                    style="width: 82%; padding-right: 30px; margin-top: 5px"
+                />
                 <button
-                    id="playBtn"
-                    onclick="javascript:play()"
-                    style="margin-top: 5px; margin-left: 5px;"
-                    title="Play"
+                    id="clearBtn"
+                    onclick="clearUrl()"
+                    class="icon-neutral"
+                    style="
+                        position: absolute;
+                        right: 8px;
+                        top: 55%;
+                        transform: translateY(-50%);
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        padding: 2px;
+                        display: none;
+                        font-size: 16px;
+                        line-height: 1;
+                    "
+                    title="Clear"
+                    type="button"
                 >
-                    <i
-                        class="bi bi-play-btn"
-                        style="color: blue; font-size: 24px"
-                    ></i>
+                    <i class="bi bi-x-circle-fill"></i>
                 </button>
             </div>
-            <br />
+
+            <button
+                id="playBtn"
+                onclick="play()"
+                style="margin-top: 5px; margin-left: 5px"
+                title="Play"
+            >
+                <i class="bi bi-play-btn icon-main" style="font-size: 24px"></i>
+            </button>
 
             <div class="container">
                 <div id="video_YT"></div>
@@ -237,18 +324,22 @@
                     id="youtubeFrame"
                     width="96%"
                     frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="
+                        accelerometer;
+                        autoplay;
+                        clipboard-write;
+                        encrypted-media;
+                        gyroscope;
+                        picture-in-picture;
+                    "
                     allowfullscreen
-                >
-                </iframe>
+                ></iframe>
             </div>
 
-            <b>
-                <a id="org_url" href="." target="_blank"></a>
-                <br /><br />
-                <a id="mp4_url" href="." target="_blank"></a>
-                <br />
-            </b>
+            <b
+                ><a id="org_url" href="." target="_blank"></a>
+                <a id="mp4_url" href="." target="_blank"></a
+            ></b>
             <div
                 id="video_description"
                 style="
@@ -257,19 +348,42 @@
                     max-height: 390px;
                     overflow-y: auto;
                     padding: 10px;
-                    border: 1px solid #ccc;
-                    background-color: #f9f9f9;
-                    text-align: left;
                     display: none;
                 "
             ></div>
-            <b>
-                <br />
-                <a id="direct_link" href="." target="_blank"></a>
-                <br /><br />
-                <a id="direct_link_yt" href="." target="_blank"></a>
-            </b>
+            <b
+                ><a id="direct_link" href="." target="_blank"></a>
+                <a id="direct_link_yt" href="." target="_blank"></a
+            ></b>
         </center>
+
+        <!-- Script toggle theme -->
+        <script>
+            (function () {
+                const toggleBtn = document.getElementById("theme-toggle");
+                const icon = toggleBtn.querySelector(".theme-icon");
+                const html = document.documentElement;
+
+                function setTheme(theme) {
+                    html.setAttribute("data-theme", theme);
+                    icon.textContent = theme === "dark" ? "☀️" : "🌙";
+                    localStorage.setItem("theme", theme);
+                }
+
+                const currentTheme = localStorage.getItem("theme") || "light";
+                setTheme(currentTheme);
+
+                toggleBtn.addEventListener("click", () => {
+                    const nextTheme =
+                        localStorage.getItem("theme") === "light"
+                            ? "dark"
+                            : "light";
+                    setTheme(nextTheme);
+                });
+            })();
+        </script>
+
+        <!-- Scripts gốc -->
         <script src="https://cdn1.minhtamgroup.org/js/polyfill.min.js?features=es6,Array.prototype.includes,CustomEvent,Object.entries,Object.values,URL"></script>
         <script src="https://cdn1.minhtamgroup.org/js/plyr.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
