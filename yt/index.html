@@ -189,6 +189,7 @@
             }
 
             function nextVideo() {
+                let previousVideoId = videoIds[currentIndex];
                 currentIndex++;
 
                 if (currentIndex >= videoIds.length) {
@@ -205,6 +206,13 @@
                 setTimeout(() => {
                     player.setPlaybackRate(2);
                 }, 500);
+
+                // Mark video as watched
+                console.info("Marking as watched: ", previousVideoId);
+                fetch(
+                    `https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt/mark-watched/${previousVideoId}`,
+                    { method: "POST" },
+                );
             }
 
             function prevVideo() {
