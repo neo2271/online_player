@@ -1,48 +1,229 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta name="theme-color" content="#000000" />
+        <meta http-equiv="pragma" content="no-cache" />
+        <title>Learning Playlist | MTG</title>
+        <link
+            rel="shortcut icon"
+            type="image/x-icon"
+            href="https://cdn1.minhtamgroup.org/icons/minhtam_500x500_black.png"
+        />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <meta name="theme-color" content="#000000">
-  <meta http-equiv="pragma" content="no-cache">
-  <title>Play YouTube Video&#39;s Audio Only</title>
-  <script src="/cdn-cgi/apps/head/4aQGo79wnurkKGDJ7nh1EhzR7Yc.js"></script>
-  <link rel='shortcut icon' type='image/x-icon'
-    href="https://cdn1.minhtamgroup.org/icons/minhtam_1000x1000_white.png" />
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,700" rel="stylesheet">
-  <link href="https://cdn1.minhtamgroup.org/css/boxicons.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn1.minhtamgroup.org/css/normalize.min.css">
-  <link rel='stylesheet' href='https://cdn1.minhtamgroup.org/css/plyr.css'>
-  <link rel="stylesheet" href="./style.css">
-  <style>
-    @font-face {
-      font-family: segoeui;
-      src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
-    }
+        <style>
+            @font-face {
+                font-family: segoeui;
+                src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
+            }
+            * {
+                font-family: segoeui;
+                word-wrap: break-word;
+            }
 
-    * {
-      font-family: segoeui;
-      word-wrap: break-word;
-    }
+            body {
+                margin: 0;
+                display: flex;
+                justify-content: center; /* căn giữa ngang */
+                background: #000;
+            }
+            .container {
+                width: 86%;
+                max-width: 1200px;
 
-  </style>
-</head>
+                display: flex;
+                flex-direction: column; /* 👈 xếp dọc */
+                align-items: center;
+            }
 
-<body>
-  <br>
-  <center>
-    <!-- partial:index.partial.html -->
-    <div id="YouTube" style="width:0px;height:0px"></div>
-    <div class="player" onclick="toggle_player()">
-      <div class="player-button" onclick="start_player();">
-        Play [<span class="duration">0:00</span>]
-      </div>
-    </div>
-    <!-- partial -->
-  </center>
-  <script src="./script.js"></script>
+            #player {
+                margin-top: 20px;
+                width: 86%;
+                /* max-width: 1200px; */
+                /* aspect-ratio: 16/9; */
+                border-radius: 12px;
+                overflow: hidden;
+            }
 
-</body>
+            .controls button {
+                background: #111;
+                color: white;
+                border: none;
+                padding: 12px 16px;
+                margin: 0 6px;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 18px;
+                transition: 0.2s;
+            }
 
+            .controls button:hover {
+                background: #333;
+                transform: scale(1.1);
+            }
+
+            .speed button {
+                background: #111;
+                color: white;
+                border: none;
+                padding: 8px 10px;
+                margin: 0 3px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: 0.2s;
+            }
+
+            .speed button:hover {
+                background: #333;
+                transform: scale(1.1);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div id="player"></div>
+            <div class="speed" style="text-align: center; margin-top: 10px">
+                <button onclick="player.setPlaybackRate(0.5)">0.5x</button>
+                <button onclick="player.setPlaybackRate(1)">1x</button>
+                <button onclick="player.setPlaybackRate(1.25)">1.25x</button>
+                <button onclick="player.setPlaybackRate(1.5)">1.5x</button>
+                <button onclick="player.setPlaybackRate(1.75)">1.75x</button>
+                <button onclick="player.setPlaybackRate(2)">2x</button>
+            </div>
+            <div class="controls" style="text-align: center; margin-top: 10px">
+                <button onclick="prevVideo()">
+                    <i data-lucide="skip-back"></i>
+                </button>
+
+                <button onclick="nextVideo()">
+                    <i data-lucide="skip-forward"></i>
+                </button>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/lucide@latest"></script>
+
+        <script>
+            lucide.createIcons();
+        </script>
+
+        <script>
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowRight") nextVideo();
+                if (e.key === "ArrowLeft") prevVideo();
+            });
+
+            let videoIds = [];
+            let currentIndex = 0;
+            let player;
+
+            // 👉 Convert URL → videoId
+            function getVideoId(url) {
+                const regExp = /(?:youtube\.com.*v=|youtu\.be\/)([^&]+)/;
+                const match = url.match(regExp);
+                return match ? match[1] : null;
+            }
+
+            // 👉 Gọi API
+            async function loadVideos() {
+                try {
+                    const res = await fetch(
+                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt",
+                    );
+                    const json = await res.json();
+
+                    // 👉 check response
+                    if (json.code !== 0) {
+                        console.error("API lỗi:", json.message);
+                        return;
+                    }
+
+                    // 👉 lấy data
+                    videoIds = json.data.map(getVideoId).filter(Boolean);
+
+                    console.log("videoIds:", videoIds);
+
+                    if (videoIds.length === 0) {
+                        console.error("Không có video hợp lệ");
+                        return;
+                    }
+
+                    initPlayer();
+                } catch (err) {
+                    console.error("Fetch lỗi:", err);
+                }
+            }
+
+            // 👉 Load YouTube API
+            const tag = document.createElement("script");
+            tag.src = "https://www.youtube.com/iframe_api";
+            document.body.appendChild(tag);
+
+            function initPlayer() {
+                player = new YT.Player("player", {
+                    videoId: videoIds[currentIndex],
+                    playerVars: {
+                        autoplay: 0,
+                        // mute: 1,
+                    },
+                    events: {
+                        onReady: onPlayerReady,
+                        onStateChange: onPlayerStateChange,
+                    },
+                });
+            }
+
+            function onPlayerReady(event) {
+                event.target.playVideo();
+                setTimeout(() => {
+                    event.target.setPlaybackRate(2);
+                }, 500);
+            }
+
+            function onPlayerStateChange(event) {
+                if (event.data === YT.PlayerState.ENDED) {
+                    nextVideo();
+                }
+            }
+
+            function nextVideo() {
+                currentIndex++;
+
+                if (currentIndex >= videoIds.length) {
+                    console.log("Hết playlist, chơi lại từ đầu");
+                    currentIndex = 0;
+                    return;
+                }
+
+                player.loadVideoById({
+                    videoId: videoIds[currentIndex],
+                    suggestedQuality: "large",
+                });
+
+                setTimeout(() => {
+                    player.setPlaybackRate(2);
+                }, 500);
+            }
+
+            function prevVideo() {
+                currentIndex--;
+
+                if (currentIndex < 0) {
+                    currentIndex = 0;
+                    return;
+                }
+
+                player.loadVideoById(videoIds[currentIndex]);
+
+                setTimeout(() => {
+                    player.setPlaybackRate(2);
+                }, 500);
+            }
+
+            // 👉 start
+            loadVideos();
+        </script>
+    </body>
 </html>
