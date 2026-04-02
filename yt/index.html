@@ -110,6 +110,16 @@
         </script>
 
         <script>
+            let count = false;
+            const params = new URLSearchParams(window.location.search);
+            if (
+                params.has("count") &&
+                (params.get("count") === "true" || params.get("count") === "1")
+            ) {
+                count = true;
+            }
+            console.log(count);
+
             document.addEventListener("keydown", (e) => {
                 if (e.key === "ArrowRight") nextVideo();
                 if (e.key === "ArrowLeft") prevVideo();
@@ -207,12 +217,14 @@
                     player.setPlaybackRate(2);
                 }, 500);
 
-                // Mark video as watched
-                console.info("Marking as watched: ", previousVideoId);
-                fetch(
-                    `https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt/mark-watched/${previousVideoId}`,
-                    { method: "POST" },
-                );
+                if (count) {
+                    // Mark video as watched
+                    console.info("Marking as watched: ", previousVideoId);
+                    fetch(
+                        `https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt/mark-watched/${previousVideoId}`,
+                        { method: "POST" },
+                    );
+                }
             }
 
             function prevVideo() {
