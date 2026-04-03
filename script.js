@@ -26,8 +26,11 @@ let played = false;
 
 let video_YT_obj = document.getElementById("video_YT");
 let video_obj = document.getElementById("video");
-let youtube_container = document.getElementById("youtubeContainer");
-let youtube_frame = document.getElementById("youtubeFrame");
+let yt_player = document.getElementById("yt_player");
+let speedButton = document.getElementById("speedButton");
+
+let player;
+let isPlayerReady = false;
 
 let url = "";
 let new_url = "";
@@ -100,7 +103,6 @@ let player_cfg = {
 };
 
 video_obj.style.display = 'none';
-youtube_container.style.display = 'none';
 
 update_ui_url();
 get_direct_link();
@@ -161,13 +163,13 @@ function get_direct_link(info = true, init = true, fromDirectLink = false) {
     console.log("direct: " + direct);
 
     update_ui_url(init);
-        // Nếu gọi từ showDirectLink thì không reload trang
-        if (!fromDirectLink && played === true) {
-            // location.reload();
-            window.location.href = new_url;
-            played = false;
-            new_init = true;
-        }
+    // Nếu gọi từ showDirectLink thì không reload trang
+    if (!fromDirectLink && played === true) {
+        // location.reload();
+        window.location.href = new_url;
+        played = false;
+        new_init = true;
+    }
 
     let video_id = "";
     let str_pattern_video = "";
@@ -349,16 +351,43 @@ function update_ui_url(init = true) {
     }
 }
 
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+        videoId: yt_video_id,
+        width: "100%",
+        height: "100%",
+        playerVars: {
+            autoplay: 0,
+        },
+        events: {
+            onReady: (event) => {
+                isPlayerReady = true;
+            }
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    // event.target.playVideo();
+    // setTimeout(() => {
+    //     event.target.setPlaybackRate(2);
+    // }, 500);
+}
+
 function showEmbedYoutube() {
     const checkbox = document.getElementById("cb_show_yt");
 
     if (checkbox.checked) {
         hideAllPlayers();
-        youtube_frame.src = `https://www.youtube.com/embed/${yt_video_id}`;
-        youtube_container.style.display = 'block';
+        yt_player.style.display = 'block';
+        speedButton.style.display = 'block';
     } else {
-        youtube_frame.src = "";
-        youtube_container.style.display = "none";
+        speedButton.style.display = 'none';
+        yt_player.style.display = 'none';
+        if (isPlayerReady && typeof player.stopVideo === "function") {
+            player.stopVideo();
+        }
+
         // Hiện lại video phù hợp
         if (play_yt_vm === true) {
             hideAllPlayers();
@@ -433,7 +462,7 @@ function showDirectLink() {
             direct = true;
             update_ui_url(false);
             // Gọi API lấy direct link nếu cần
-                get_direct_link(false, false, true);
+            get_direct_link(false, false, true);
         }
     } else {
         // Remove &direct=true if exists
@@ -456,8 +485,12 @@ function clearUrl() {
     document.getElementById('url').focus();
 }
 
+function setSpeed(speed) {
+    player.setPlaybackRate(speed);
+}
+
 // Hiển thị/ẩn nút clear khi có text
-document.getElementById('url').addEventListener('input', function() {
+document.getElementById('url').addEventListener('input', function () {
     const clearBtn = document.getElementById('clearBtn');
     if (this.value.length > 0) {
         clearBtn.style.display = 'block';
