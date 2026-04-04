@@ -28,21 +28,24 @@
                 justify-content: center; /* căn giữa ngang */
                 background: #000;
             }
+
             .container {
-                width: 86%;
-                max-width: 1200px;
+                width: 100%;
 
                 display: flex;
                 flex-direction: column; /* 👈 xếp dọc */
                 align-items: center;
             }
 
+            .container > * {
+                width: 100%;
+            }
+
             #player {
-                margin-top: 20px;
-                width: 86%;
-                max-width: 1200px;
+                margin-top: 10px;
+                width: 79%;
                 aspect-ratio: 16/9;
-                border-radius: 12px;
+                border-radius: 10px;
                 overflow: hidden;
             }
 
@@ -79,6 +82,18 @@
                 background: #333;
                 transform: scale(1.1);
             }
+
+            .yt-link-wrapper {
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            #ytLink {
+                color: #4da6ff;
+                font-size: 14px;
+                display: inline-block;
+            }
         </style>
     </head>
     <body>
@@ -100,6 +115,10 @@
                 <button onclick="nextVideo()">
                     <i data-lucide="skip-forward"></i>
                 </button>
+            </div>
+
+            <div class="yt-link-wrapper">
+                <a id="ytLink" href="#" target="_blank"></a>
             </div>
         </div>
 
@@ -185,6 +204,7 @@
                         onStateChange: onPlayerStateChange,
                     },
                 });
+                updateYoutubeLink();
             }
 
             function onPlayerReady(event) {
@@ -192,6 +212,7 @@
                 setTimeout(() => {
                     event.target.setPlaybackRate(2);
                 }, 500);
+                updateYoutubeLink();
             }
 
             function onPlayerStateChange(event) {
@@ -218,6 +239,7 @@
                 setTimeout(() => {
                     player.setPlaybackRate(2);
                 }, 500);
+                updateYoutubeLink();
 
                 if (count) {
                     // Mark video as watched
@@ -242,6 +264,16 @@
                 setTimeout(() => {
                     player.setPlaybackRate(2);
                 }, 500);
+                updateYoutubeLink();
+            }
+
+            function updateYoutubeLink() {
+                const videoId = videoIds[currentIndex];
+                const url = `https://play.minhtamgroup.org/?url=https://www.youtube.com/watch?v=${videoId}`;
+                const link = document.getElementById("ytLink");
+
+                link.href = url;
+                link.textContent = url;
             }
 
             // 👉 start
