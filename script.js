@@ -217,7 +217,7 @@ function get_direct_link(info = true, init = true, fromDirectLink = false) {
 
                     if (title.length > 0 && author_name.length > 0) {
                         document.title = duration + " | " + title + " | " + author_name + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + published_at;
-                        document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + " | " + published_at + "<br/><br/>" + url;
+                        document.getElementById("org_url").innerHTML = duration + " | " + " 👀." + viewCount + " 👍." + likeCount + " 💖." + favoriteCount + " 💬." + commentCount + " | " + title + " | " + author_name + " | " + published_at + "<br/>" + url;
 
                         // Update URL without reloading page
                         window.history.pushState({}, '', window.location.href);
