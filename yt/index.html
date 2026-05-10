@@ -94,11 +94,19 @@
                 font-size: 14px;
                 display: inline-block;
             }
+
+            #videoTitle {
+                color: #fff;
+                text-align: center;
+                font-size: 14px;
+                margin-top: 10px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div id="player"></div>
+            <div id="videoTitle"></div>
             <div class="speed" style="text-align: center; margin-top: 10px">
                 <button onclick="player.setPlaybackRate(0.5)">0.5x</button>
                 <button onclick="player.setPlaybackRate(1)">1x</button>
@@ -211,11 +219,16 @@
                 event.target.playVideo();
                 setTimeout(() => {
                     event.target.setPlaybackRate(2);
+                    updateVideoTitle();
                 }, 500);
                 updateYoutubeLink();
             }
 
             function onPlayerStateChange(event) {
+                if (event.data === YT.PlayerState.PLAYING) {
+                    updateVideoTitle();
+                }
+
                 if (event.data === YT.PlayerState.ENDED) {
                     nextVideo();
                 }
@@ -239,7 +252,9 @@
                 setTimeout(() => {
                     player.setPlaybackRate(2);
                 }, 500);
+
                 updateYoutubeLink();
+                updateVideoTitle();
 
                 if (count) {
                     // Mark video as watched
@@ -264,7 +279,9 @@
                 setTimeout(() => {
                     player.setPlaybackRate(2);
                 }, 500);
+
                 updateYoutubeLink();
+                updateVideoTitle();
             }
 
             function updateYoutubeLink() {
@@ -274,6 +291,19 @@
 
                 link.href = url;
                 link.textContent = url;
+            }
+
+            function updateVideoTitle() {
+                const data = player.getVideoData();
+
+                const duration = player.getDuration();
+                const minutes = Math.floor(duration / 60);
+                const seconds = Math.floor(duration % 60)
+                    .toString()
+                    .padStart(2, "0");
+
+                document.getElementById("videoTitle").textContent =
+                    `${minutes}:${seconds} | ${data?.author || ""} | ${data?.title || ""}`;
             }
 
             // 👉 start
