@@ -150,7 +150,7 @@
             ) {
                 count = true;
             }
-            console.log(count);
+            console.log(`count: ${count}`);
 
             // 👉 Convert URL → videoId
             function getVideoId(url) {
@@ -169,13 +169,12 @@
 
                     // 👉 check response
                     if (json.code !== 0) {
-                        console.error("API lỗi:", json.message);
+                        console.error(`API lỗi: ${json.message}`);
                         return;
                     }
 
                     // 👉 lấy data
                     videoIds = json.data.map(getVideoId).filter(Boolean);
-
                     console.log("videoIds:", videoIds);
 
                     if (videoIds.length === 0) {
@@ -185,7 +184,7 @@
 
                     initPlayer();
                 } catch (err) {
-                    console.error("Fetch lỗi:", err);
+                    console.error(`Fetch lỗi: ${err}`);
                 }
             }
 
@@ -213,8 +212,8 @@
 
             function onPlayerReady(event) {
                 event.target.playVideo();
-                updateVideoTitle();
                 updateYoutubeLink();
+                updateVideoTitle();
             }
 
             function onPlayerStateChange(event) {
@@ -242,13 +241,11 @@
                     videoId: videoIds[currentIndex],
                     suggestedQuality: "large",
                 });
-
                 updateYoutubeLink();
-                updateVideoTitle();
 
                 if (count) {
                     // Mark video as watched
-                    console.info("Marking as watched: ", previousVideoId);
+                    console.info(`Marking as watched: ${previousVideoId}`);
                     fetch(
                         `https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt/mark-watched/${previousVideoId}`,
                         { method: "POST" },
@@ -265,9 +262,7 @@
                 }
 
                 player.loadVideoById(videoIds[currentIndex]);
-
                 updateYoutubeLink();
-                updateVideoTitle();
             }
 
             function updateYoutubeLink() {
@@ -281,31 +276,33 @@
 
             function updateVideoTitle() {
                 const data = player.getVideoData();
-
+                console.info("Video data:", data);
                 const duration = player.getDuration();
                 const minutes = Math.floor(duration / 60);
                 const seconds = Math.floor(duration % 60)
                     .toString()
                     .padStart(2, "0");
 
-                document.getElementById("videoTitle").textContent =
-                    `${minutes}:${seconds} | ${data?.author || ""} | ${data?.title || ""}`;
+                let title = [
+                    `${minutes}:${seconds}`,
+                    data?.author || "",
+                    data?.title || "",
+                ]
+                    .filter(Boolean)
+                    .join(" | ");
+                console.info(`title: ${title}`);
+                document.getElementById("videoTitle").textContent = title;
             }
 
             function forcePlaybackRate(rate) {
                 if (!player) return;
 
                 // nếu đang đúng rate rồi thì ép đổi tạm
-                const current = player.getPlaybackRate();
-                if (current === rate) {
-                    const tempRate = rate === 2 ? 1.5 : 1;
-                    player.setPlaybackRate(tempRate);
-                    setTimeout(() => {
-                        player.setPlaybackRate(rate);
-                    }, 150);
-                } else {
+                const tempRate = rate === 2 ? 1.5 : 1;
+                player.setPlaybackRate(tempRate);
+                setTimeout(() => {
                     player.setPlaybackRate(rate);
-                }
+                }, 150);
             }
 
             function setSpeed(rate) {
@@ -321,13 +318,13 @@
             document.addEventListener("visibilitychange", () => {
                 if (document.visibilityState === "visible") {
                     setTimeout(() => {
-                        forcePlaybackRate(currentRate);
+                        setSpeed(currentRate);
                     }, 300);
                 }
             });
 
             window.addEventListener("focus", () => {
-                forcePlaybackRate(currentRate);
+                setSpeed(currentRate);
             });
 
             // 👉 start
