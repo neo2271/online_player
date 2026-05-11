@@ -120,6 +120,10 @@
                     <i data-lucide="skip-back"></i>
                 </button>
 
+                <button onclick="togglePlay()" id="btnPlayPause">
+                    <i data-lucide="play"></i>
+                </button>
+
                 <button onclick="nextVideo()">
                     <i data-lucide="skip-forward"></i>
                 </button>
@@ -217,14 +221,44 @@
             }
 
             function onPlayerStateChange(event) {
+                const btn = document.getElementById("btnPlayPause");
+
                 if (event.data === YT.PlayerState.PLAYING) {
                     setSpeed(currentRate);
                     updateVideoTitle();
+                    btn.innerHTML = '<i data-lucide="pause"></i>';
+                }
+
+                if (event.data === YT.PlayerState.PAUSED) {
+                    btn.innerHTML = '<i data-lucide="play"></i>';
                 }
 
                 if (event.data === YT.PlayerState.ENDED) {
                     nextVideo();
                 }
+                lucide.createIcons();
+            }
+
+            function togglePlay() {
+                if (!player) return;
+
+                const state = player.getPlayerState();
+                const btn = document.getElementById("btnPlayPause");
+
+                if (state === YT.PlayerState.PLAYING) {
+                    player.pauseVideo();
+                    btn.innerHTML = '<i data-lucide="play"></i>';
+                } else if (state === -1 || state === YT.PlayerState.BUFFERING) {
+                    // Lần đầu load: dùng loadVideoById để trigger play có user gesture
+                    player.loadVideoById({
+                        videoId: videoIds[currentIndex],
+                        suggestedQuality: "large",
+                    });
+                } else {
+                    player.playVideo();
+                    btn.innerHTML = '<i data-lucide="pause"></i>';
+                }
+                lucide.createIcons(); // re-render icon sau khi đổi
             }
 
             function nextVideo() {
