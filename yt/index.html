@@ -147,6 +147,10 @@
             let player;
             let currentRate = 2;
 
+            let video_count = 0;
+            let video_total = 0;
+            let video_idx = 1;
+
             const params = new URLSearchParams(window.location.search);
             if (
                 params.has("count") &&
@@ -176,6 +180,10 @@
                         console.error(`API lỗi: ${json.message}`);
                         return;
                     }
+
+                    // Update count/total
+                    video_count = json.count;
+                    video_total = json.total;
 
                     // 👉 lấy data
                     videoIds = json.data.map(getVideoId).filter(Boolean);
@@ -263,19 +271,6 @@
 
             function nextVideo() {
                 let previousVideoId = videoIds[currentIndex];
-                currentIndex++;
-
-                if (currentIndex >= videoIds.length) {
-                    console.log("Hết playlist, chơi lại từ đầu");
-                    currentIndex = 0;
-                    return;
-                }
-
-                player.loadVideoById({
-                    videoId: videoIds[currentIndex],
-                    suggestedQuality: "large",
-                });
-                updateYoutubeLink();
 
                 if (count) {
                     // Mark video as watched
@@ -285,18 +280,32 @@
                         { method: "POST" },
                     );
                 }
+
+                currentIndex++;
+                if (currentIndex >= videoIds.length) {
+                    console.log("Hết playlist, tải lại web");
+                    location.reload();
+                    return;
+                }
+
+                player.loadVideoById({
+                    videoId: videoIds[currentIndex],
+                    suggestedQuality: "large",
+                });
+                updateYoutubeLink();
+                video_idx += 1;
             }
 
             function prevVideo() {
                 currentIndex--;
 
                 if (currentIndex < 0) {
-                    currentIndex = 0;
                     return;
                 }
 
                 player.loadVideoById(videoIds[currentIndex]);
                 updateYoutubeLink();
+                video_idx -= 1;
             }
 
             function updateYoutubeLink() {
@@ -318,7 +327,7 @@
                     .padStart(2, "0");
 
                 let title = [
-                    `${minutes}:${seconds}`,
+                    `[${video_idx}/${video_count}/${video_total}] ${minutes}:${seconds}`,
                     data?.author || "",
                     data?.title || "",
                 ]
