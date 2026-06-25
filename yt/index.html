@@ -13,6 +13,10 @@
         />
 
         <style>
+            :root {
+                color-scheme: dark;
+            }
+
             @font-face {
                 font-family: segoeui;
                 src: url(https://cdn1.minhtamgroup.org/fonts/SEGOEUI.TTF);
@@ -66,8 +70,7 @@
                 transform: scale(1.1);
             }
 
-            .speed button,
-            .category select {
+            .speed button {
                 background: #111;
                 color: white;
                 border: none;
@@ -77,6 +80,23 @@
                 cursor: pointer;
                 font-size: 14px;
                 transition: 0.2s;
+            }
+
+            .category select {
+                background: #111;
+                color: white;
+                border: 1px solid #333;
+                border-radius: 6px;
+                padding: 8px 12px;
+                min-width: 160px;
+                text-align-last: center;
+            }
+
+            .category {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 8px;
             }
 
             .speed button:hover {
@@ -202,9 +222,12 @@
                     console.log("videoIds:", videoIds);
 
                     if (videoIds.length === 0) {
-                        console.error("Không có video hợp lệ");
+                        showEmptyPlaylist();
                         return;
                     }
+
+                    // Enale controls
+                    showPlaylist();
 
                     currentIndex = 0;
                     video_idx = 1;
@@ -381,6 +404,46 @@
                 const select = document.getElementById("videoType");
                 currentType = select.value;
                 loadVideos(currentType);
+            }
+
+            function showEmptyPlaylist() {
+                if (player) {
+                    player.destroy();
+                    player = null;
+                }
+
+                videoIds = [];
+                currentIndex = 0;
+
+                // Reset icon Play/Pause
+                const btn = document.getElementById("btnPlayPause");
+                btn.innerHTML = '<i data-lucide="play"></i>';
+                lucide.createIcons();
+
+                document.getElementById("player").style.display = "none";
+                document.getElementById("ytLink").style.display = "none";
+
+                document.getElementById("videoTitle").textContent =
+                    "🎉 Không còn video nào để xem";
+
+                document
+                    .querySelectorAll(".controls button, .speed button")
+                    .forEach((btn) => (btn.disabled = true));
+            }
+
+            function showPlaylist() {
+                if (!player) {
+                    initPlayer();
+                }
+
+                document.getElementById("player").style.display = "block";
+                document.getElementById("ytLink").style.display = "block";
+
+                document.getElementById("videoTitle").textContent = "";
+
+                document
+                    .querySelectorAll(".controls button, .speed button")
+                    .forEach((btn) => (btn.disabled = false));
             }
 
             document.addEventListener("keydown", (e) => {
