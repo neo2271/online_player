@@ -66,7 +66,8 @@
                 transform: scale(1.1);
             }
 
-            .speed button {
+            .speed button,
+            .category select {
                 background: #111;
                 color: white;
                 border: none;
@@ -132,6 +133,14 @@
             <div class="yt-link-wrapper">
                 <a id="ytLink" href="#" target="_blank"></a>
             </div>
+
+            <div class="category" style="text-align: center; margin-top: 10px">
+                <select id="videoType" onchange="changeVideoType()">
+                    <option value="all">Tất cả thể loại</option>
+                    <option value="0">[0] Triết lý</option>
+                    <option value="1">[1] Khoa học</option>
+                </select>
+            </div>
         </div>
 
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -141,6 +150,7 @@
         </script>
 
         <script>
+            let currentType = "all";
             let count = false;
             let videoIds = [];
             let currentIndex = 0;
@@ -168,24 +178,26 @@
             }
 
             // 👉 Gọi API
-            async function loadVideos() {
+            async function loadVideos(type = "all") {
                 try {
-                    const res = await fetch(
-                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt",
-                    );
+                    let apiUrl =
+                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt";
+
+                    if (type !== "all") {
+                        apiUrl += `?type=${type}`;
+                    }
+
+                    const res = await fetch(apiUrl);
                     const json = await res.json();
 
-                    // 👉 check response
                     if (json.code !== 0) {
                         console.error(`API lỗi: ${json.message}`);
                         return;
                     }
 
-                    // Update count/total
                     video_count = json.count;
                     video_total = json.total;
 
-                    // 👉 lấy data
                     videoIds = json.data.map(getVideoId).filter(Boolean);
                     console.log("videoIds:", videoIds);
 
@@ -194,7 +206,19 @@
                         return;
                     }
 
-                    initPlayer();
+                    currentIndex = 0;
+                    video_idx = 1;
+
+                    if (player) {
+                        player.loadVideoById({
+                            videoId: videoIds[0],
+                            suggestedQuality: "large",
+                        });
+
+                        updateYoutubeLink();
+                    } else {
+                        initPlayer();
+                    }
                 } catch (err) {
                     console.error(`Fetch lỗi: ${err}`);
                 }
@@ -351,6 +375,12 @@
             function setSpeed(rate) {
                 currentRate = rate;
                 forcePlaybackRate(rate);
+            }
+
+            function changeVideoType() {
+                const select = document.getElementById("videoType");
+                currentType = select.value;
+                loadVideos(currentType);
             }
 
             document.addEventListener("keydown", (e) => {
