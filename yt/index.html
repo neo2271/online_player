@@ -155,7 +155,7 @@
             </div>
 
             <div class="category" style="text-align: center; margin-top: 10px">
-                <select id="videoType" onchange="changeVideoType()">
+                <select id="videoType">
                     <option value="all">Tất cả thể loại</option>
                     <option value="0">[0] Triết lý</option>
                     <option value="1">[1] Khoa học</option>
@@ -237,7 +237,7 @@
                             videoId: videoIds[0],
                             suggestedQuality: "large",
                         });
-
+                        updateVideoTitle();
                         updateYoutubeLink();
                     } else {
                         initPlayer();
@@ -266,13 +266,14 @@
                         onStateChange: onPlayerStateChange,
                     },
                 });
+                updateVideoTitle();
                 updateYoutubeLink();
             }
 
             function onPlayerReady(event) {
                 event.target.playVideo();
-                updateYoutubeLink();
                 updateVideoTitle();
+                updateYoutubeLink();
             }
 
             function onPlayerStateChange(event) {
@@ -281,6 +282,7 @@
                 if (event.data === YT.PlayerState.PLAYING) {
                     setSpeed(currentRate);
                     updateVideoTitle();
+                    updateYoutubeLink();
                     btn.innerHTML = '<i data-lucide="pause"></i>';
                 }
 
@@ -309,6 +311,8 @@
                         videoId: videoIds[currentIndex],
                         suggestedQuality: "large",
                     });
+                    updateVideoTitle();
+                    updateYoutubeLink();
                 } else {
                     player.playVideo();
                     btn.innerHTML = '<i data-lucide="pause"></i>';
@@ -339,6 +343,7 @@
                     videoId: videoIds[currentIndex],
                     suggestedQuality: "large",
                 });
+                updateVideoTitle();
                 updateYoutubeLink();
                 video_idx += 1;
             }
@@ -351,6 +356,7 @@
                 }
 
                 player.loadVideoById(videoIds[currentIndex]);
+                updateVideoTitle();
                 updateYoutubeLink();
                 video_idx -= 1;
             }
@@ -458,6 +464,18 @@
                     }, 300);
                 }
             });
+
+            let lastType = document.getElementById("videoType").value;
+            setInterval(() => {
+                const currentTypeValue =
+                    document.getElementById("videoType").value;
+
+                if (currentTypeValue !== lastType) {
+                    lastType = currentTypeValue;
+                    currentType = currentTypeValue;
+                    loadVideos(currentType);
+                }
+            }, 500);
 
             window.addEventListener("focus", () => {
                 setSpeed(currentRate);
