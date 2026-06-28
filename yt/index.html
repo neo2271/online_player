@@ -157,8 +157,11 @@
             <div class="category" style="text-align: center; margin-top: 10px">
                 <select id="videoType">
                     <option value="all">Tất cả thể loại</option>
-                    <option value="0">[0] Triết lý</option>
-                    <option value="1">[1] Khoa học</option>
+                    <option value="0">[0] _tmp</option>
+                    <option value="1">[1] Triết lý</option>
+                    <option value="2">[2] Khoa học</option>
+                    <option value="3">[3] Tài chính - Kinh doanh</option>
+                    <option value="4">[4] Bài học</option>
                 </select>
             </div>
         </div>
@@ -414,8 +417,7 @@
 
             function showEmptyPlaylist() {
                 if (player) {
-                    player.destroy();
-                    player = null;
+                    player.stopVideo();
                 }
 
                 videoIds = [];
