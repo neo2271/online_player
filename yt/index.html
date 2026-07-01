@@ -157,11 +157,6 @@
             <div class="category" style="text-align: center; margin-top: 10px">
                 <select id="videoType">
                     <option value="all">Tất cả thể loại</option>
-                    <option value="0">[0] _tmp</option>
-                    <option value="1">[1] Triết lý</option>
-                    <option value="2">[2] Khoa học</option>
-                    <option value="3">[3] Tài chính - Kinh doanh</option>
-                    <option value="4">[4] Bài học</option>
                 </select>
             </div>
         </div>
@@ -200,6 +195,37 @@
                 return match ? match[1] : null;
             }
 
+            function updateVideoTypeList(typeList) {
+                const select = document.getElementById("videoType");
+
+                // Lưu giá trị đang chọn
+                const currentValue = select.value;
+
+                // Reset
+                select.innerHTML = "";
+
+                // Option mặc định
+                const allOption = document.createElement("option");
+                allOption.value = "all";
+                allOption.textContent = "Tất cả thể loại";
+                select.appendChild(allOption);
+
+                // Thêm từ API
+                typeList.forEach((item) => {
+                    const option = document.createElement("option");
+                    option.value = item;
+                    option.textContent = item;
+                    select.appendChild(option);
+                });
+
+                // Khôi phục lựa chọn nếu còn tồn tại
+                if ([...select.options].some((o) => o.value === currentValue)) {
+                    select.value = currentValue;
+                } else {
+                    select.value = "all";
+                }
+            }
+
             // 👉 Gọi API
             async function loadVideos(type = "all") {
                 try {
@@ -207,11 +233,12 @@
                         "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt";
 
                     if (type !== "all") {
-                        apiUrl += `?type=${type}`;
+                        apiUrl += `?type=${encodeURIComponent(type)}`;
                     }
 
                     const res = await fetch(apiUrl);
                     const json = await res.json();
+                    updateVideoTypeList(json.type_list || []);
 
                     if (json.code !== 0) {
                         console.error(`API lỗi: ${json.message}`);
