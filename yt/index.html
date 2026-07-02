@@ -87,9 +87,11 @@
                 color: white;
                 border: 1px solid #333;
                 border-radius: 6px;
-                padding: 8px 12px;
-                min-width: 160px;
+                padding: 4px 8px;
+                width: fit-content;
                 text-align-last: center;
+                margin-bottom: 8px;
+                min-width: 0;
             }
 
             .category {
@@ -157,6 +159,10 @@
             <div class="category" style="text-align: center; margin-top: 10px">
                 <select id="videoType">
                     <option value="all">Tất cả thể loại</option>
+                </select>
+                <select id="sortType">
+                    <option value="0">Xem mới trước</option>
+                    <option value="1">Xem cũ trước</option>
                 </select>
             </div>
         </div>
@@ -227,13 +233,13 @@
             }
 
             // 👉 Gọi API
-            async function loadVideos(type = "all") {
+            async function loadVideos(type = "all", sort = "0") {
                 try {
                     let apiUrl =
-                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt";
+                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt"+`?sort=${sort}`;
 
                     if (type !== "all") {
-                        apiUrl += `?type=${encodeURIComponent(type)}`;
+                        apiUrl += `&type=${encodeURIComponent(type)}`;
                     }
 
                     const res = await fetch(apiUrl);
@@ -439,7 +445,9 @@
             function changeVideoType() {
                 const select = document.getElementById("videoType");
                 currentType = select.value;
-                loadVideos(currentType);
+                const sortSelect = document.getElementById("sortType");
+                currentSort = sortSelect.value;
+                loadVideos(currentType, currentSort);
             }
 
             function showEmptyPlaylist() {
@@ -495,15 +503,20 @@
             });
 
             let lastType = document.getElementById("videoType").value;
+            let lastSort = document.getElementById("sortType").value;
             setInterval(() => {
                 const currentTypeValue =
                     document.getElementById("videoType").value;
+                const currentSortValue =
+                    document.getElementById("sortType").value;
 
-                if (currentTypeValue !== lastType) {
+                if (currentTypeValue !== lastType || currentSortValue !== lastSort) {
                     lastType = currentTypeValue;
+                    lastSort = currentSortValue;
                     currentType = currentTypeValue;
+                    currentSort = currentSortValue;
                     document.getElementById("videoTitle").textContent = "";
-                    loadVideos(currentType);
+                    loadVideos(currentType, currentSort);
                 }
             }, 500);
 
