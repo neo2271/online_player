@@ -502,6 +502,7 @@
                 if (currentTypeValue !== lastType) {
                     lastType = currentTypeValue;
                     currentType = currentTypeValue;
+                    document.getElementById("videoTitle").textContent = "";
                     loadVideos(currentType);
                 }
             }, 500);
