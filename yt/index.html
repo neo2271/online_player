@@ -407,25 +407,38 @@
                 link.textContent = url;
             }
 
-            function updateVideoTitle() {
-                const data = player.getVideoData();
-                console.info("Video data:", data);
-                const duration = player.getDuration();
-                const minutes = Math.floor(duration / 60);
-                const seconds = Math.floor(duration % 60)
-                    .toString()
-                    .padStart(2, "0");
+            function formatTime(seconds) {
+                seconds = Math.floor(seconds);
+                const h = Math.floor(seconds / 3600);
+                const m = Math.floor((seconds % 3600) / 60);
+                const s = seconds % 60;
 
+                if (h > 0) {
+                    return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+                }
+                return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+            }
+
+            function updateVideoTitle() {
+                if (!player || typeof player.getVideoData !== "function") return;
+
+                const data = player.getVideoData();
+                const current = player.getCurrentTime() || 0;
+                const duration = player.getDuration() || 0;
                 let title = [
-                    `[${video_idx}/${video_count}/${video_total}] ${minutes}:${seconds}`,
-                    data?.author || "",
+                    `[${video_idx}/${video_count}/${video_total}] [${formatTime(current)}/${formatTime(duration)}] ${data?.author || ""}`,
                     data?.title || "",
                 ]
                     .filter(Boolean)
                     .join(" | ");
-                console.info(`title: ${title}`);
                 document.getElementById("videoTitle").textContent = title;
             }
+
+            setInterval(() => {
+                if (player) {
+                    updateVideoTitle();
+                }
+            }, 500);
 
             function forcePlaybackRate(rate) {
                 if (!player) return;
