@@ -175,6 +175,7 @@
 
         <script>
             let count = false;
+            let oldest = false;
             let videoIds = [];
             let currentIndex = 0;
             let player;
@@ -191,7 +192,14 @@
             ) {
                 count = true;
             }
-            console.log(`count: ${count}`);
+            if (
+                params.has("old") &&
+                (params.get("old") === "true" || params.get("old") === "1")
+            ) {
+                oldest = true;
+                document.getElementById("sortType").value = "1";
+            }
+            console.log(`count: ${count} | oldest: ${oldest}`);
 
             // 👉 Convert URL → videoId
             function getVideoId(url) {
@@ -530,7 +538,7 @@
             });
 
             // 👉 start
-            loadVideos();
+            loadVideos(lastType, lastSort);
         </script>
     </body>
 </html>
