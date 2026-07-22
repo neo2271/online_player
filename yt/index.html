@@ -161,8 +161,8 @@
                     <option value="all">Tất cả thể loại</option>
                 </select>
                 <select id="sortType">
-                    <option value="0">Xem mới trước</option>
                     <option value="1">Xem cũ trước</option>
+                    <option value="0">Xem mới trước</option>
                 </select>
             </div>
         </div>
@@ -194,10 +194,10 @@
             }
             if (
                 params.has("old") &&
-                (params.get("old") === "true" || params.get("old") === "1")
+                (params.get("old") === "false" || params.get("old") === "0")
             ) {
-                oldest = true;
-                document.getElementById("sortType").value = "1";
+                oldest = false;
+                document.getElementById("sortType").value = "0";
             }
             console.log(`count: ${count} | oldest: ${oldest}`);
 
