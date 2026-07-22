@@ -540,6 +540,12 @@
                 setSpeed(currentRate);
             });
 
+            document.addEventListener("DOMContentLoaded", function() {
+                const sortType = document.getElementById("sortType");
+                sortType.value = lastSort;
+                sortType.dispatchEvent(new Event('change'));
+            });
+
             // 👉 start
             loadVideos(lastType, lastSort);
         </script>
