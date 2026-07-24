@@ -177,7 +177,7 @@
             let count = false;
             let oldest = false;
             let videoIds = [];
-            let videoTimes = [];
+            let videoTitles = [];
             let currentIndex = 0;
             let player;
             let currentRate = 2;
@@ -268,7 +268,7 @@
                     videoIds = json.data.map(getVideoId).filter(Boolean);
                     console.log("videoIds:", videoIds);
 
-                    videoTimes = json.time || [];
+                    videoTitles = json.title || [];
 
                     // Enale controls
                     showPlaylist();
@@ -439,9 +439,8 @@
                 const current = player.getCurrentTime() || 0;
                 const duration = player.getDuration() || 0;
                 let title = [
-                    `[${video_idx}/${video_count}/${video_total}] [${formatTime(current)}/${formatTime(duration)}] ${data?.author || ""}`,
-                    videoTimes[currentIndex] || "",
-                    data?.title || "",
+                    `[${video_idx}/${video_count}/${video_total}] [${formatTime(current)}/${formatTime(duration)}]`,
+                    videoTitles[currentIndex] || "",
                 ]
                     .filter(Boolean)
                     .join(" | ");
