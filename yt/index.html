@@ -215,6 +215,7 @@
             let oldest = false;
             let videoIds = [];
             let videoTitles = [];
+            let watchedVideos = new Set();
             let currentIndex = 0;
             let player;
             let currentRate = 2;
@@ -411,7 +412,10 @@
                     fetch(
                         `https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt/mark-watched/${previousVideoId}`,
                         { method: "POST" },
-                    );
+                    ).then(() => {
+                        watchedVideos.add(previousVideoId);
+                        renderPlaylist();
+                    });
                 }
 
                 currentIndex++;
@@ -562,6 +566,13 @@
                 playlist.innerHTML = "";
 
                 videoTitles.forEach((title, index) => {
+                    const watched = watchedVideos.has(videoIds[index]);
+                    let prefix = watched ? "✔" : index + 1;
+
+                    if (index === currentIndex) {
+                        prefix = "▶";
+                    }
+
                     const item = document.createElement("div");
 
                     item.className =
@@ -569,9 +580,7 @@
                         (index === currentIndex ? " active" : "");
 
                     item.innerHTML = `
-                        <span class="index">
-                            ${index === currentIndex ? "▶" : index + 1}
-                        </span>
+                        <span class="index">${prefix}</span>
                         ${title}
                     `;
 
