@@ -124,6 +124,41 @@
                 font-size: 14px;
                 margin-top: 10px;
             }
+
+            .playlist {
+                font-size: 14px;
+
+                width: 79%;
+                margin-top: 15px;
+
+                max-height: 350px;
+                overflow-y: auto;
+
+                background: #111;
+                border-radius: 10px;
+            }
+
+            .playlist-item {
+                padding: 12px 16px;
+                cursor: pointer;
+                border-bottom: 1px solid #222;
+                color: #ddd;
+                transition: background 0.2s;
+            }
+
+            .playlist-item:hover {
+                background: #222;
+            }
+
+            .playlist-item.active {
+                background: #0066cc;
+                color: white;
+            }
+
+            .playlist-item .index {
+                color: #999;
+                margin-right: 8px;
+            }
         </style>
     </head>
     <body>
@@ -165,6 +200,8 @@
                     <option value="0">Xem mới trước</option>
                 </select>
             </div>
+
+            <div id="playlist" class="playlist"></div>
         </div>
 
         <script src="https://unpkg.com/lucide@latest"></script>
@@ -244,7 +281,8 @@
             async function loadVideos(type = "all", sort = "0") {
                 try {
                     let apiUrl =
-                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt"+`?sort=${sort}`;
+                        "https://dev-py-svl.minhtamgroup.org/api/v1/list/learning/yt" +
+                        `?sort=${sort}`;
 
                     if (type !== "all") {
                         apiUrl += `&type=${encodeURIComponent(type)}`;
@@ -269,6 +307,9 @@
                     console.log("videoIds:", videoIds);
 
                     videoTitles = json.title || [];
+
+                    // Render playlist
+                    renderPlaylist();
 
                     // Enale controls
                     showPlaylist();
@@ -391,6 +432,7 @@
                 updateVideoTitle();
                 updateYoutubeLink();
                 video_idx += 1;
+                renderPlaylist();
             }
 
             function prevVideo() {
@@ -404,6 +446,7 @@
                 updateVideoTitle();
                 updateYoutubeLink();
                 video_idx -= 1;
+                renderPlaylist();
             }
 
             function updateYoutubeLink() {
@@ -428,7 +471,8 @@
             }
 
             function updateVideoTitle() {
-                if (!player || typeof player.getVideoData !== "function") return;
+                if (!player || typeof player.getVideoData !== "function")
+                    return;
 
                 if (videoIds.length === 0 || currentIndex >= videoIds.length) {
                     showEmptyPlaylist();
@@ -513,6 +557,51 @@
                     .forEach((btn) => (btn.disabled = false));
             }
 
+            function renderPlaylist() {
+                const playlist = document.getElementById("playlist");
+                playlist.innerHTML = "";
+
+                videoTitles.forEach((title, index) => {
+                    const item = document.createElement("div");
+
+                    item.className =
+                        "playlist-item" +
+                        (index === currentIndex ? " active" : "");
+
+                    item.innerHTML = `
+                        <span class="index">
+                            ${index === currentIndex ? "▶" : index + 1}
+                        </span>
+                        ${title}
+                    `;
+
+                    item.onclick = () => playVideo(index);
+
+                    playlist.appendChild(item);
+                });
+
+                playlist.querySelector(".active")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                });
+            }
+
+            function playVideo(index) {
+                if (index < 0 || index >= videoIds.length) return;
+
+                currentIndex = index;
+                video_idx = index + 1;
+
+                player.loadVideoById({
+                    videoId: videoIds[currentIndex],
+                    suggestedQuality: "large",
+                });
+
+                updateVideoTitle();
+                updateYoutubeLink();
+                renderPlaylist();
+            }
+
             document.addEventListener("keydown", (e) => {
                 if (e.key === "ArrowRight") nextVideo();
                 if (e.key === "ArrowLeft") prevVideo();
@@ -529,9 +618,14 @@
             let lastType = document.getElementById("videoType").value;
             let lastSort = document.getElementById("sortType").value;
             setInterval(() => {
-                const currentTypeValue = document.getElementById("videoType").value;
-                const currentSortValue = document.getElementById("sortType").value;
-                if (currentTypeValue !== lastType || currentSortValue !== lastSort) {
+                const currentTypeValue =
+                    document.getElementById("videoType").value;
+                const currentSortValue =
+                    document.getElementById("sortType").value;
+                if (
+                    currentTypeValue !== lastType ||
+                    currentSortValue !== lastSort
+                ) {
                     lastType = currentTypeValue;
                     lastSort = currentSortValue;
                     document.getElementById("videoTitle").textContent = "";
@@ -543,10 +637,10 @@
                 setSpeed(currentRate);
             });
 
-            document.addEventListener("DOMContentLoaded", function() {
+            document.addEventListener("DOMContentLoaded", function () {
                 const sortType = document.getElementById("sortType");
                 sortType.value = lastSort;
-                sortType.dispatchEvent(new Event('change'));
+                sortType.dispatchEvent(new Event("change"));
             });
 
             // 👉 start
