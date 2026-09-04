@@ -652,6 +652,43 @@
                 sortType.dispatchEvent(new Event("change"));
             });
 
+            // Lắng nghe sự kiện Fullscreen của trình duyệt
+            function handleFullscreenChange() {
+                const isFullscreen = Boolean(
+                    document.fullscreenElement ||
+                    document.webkitFullscreenElement ||
+                    document.mozFullScreenElement ||
+                    document.msFullscreenElement,
+                );
+
+                if (isFullscreen) {
+                    // Vào fullscreen -> Thử xoay ngang
+                    if (screen.orientation && screen.orientation.lock) {
+                        screen.orientation.lock("landscape").catch((err) => {
+                            console.log(
+                                "Không thể khóa hướng xoay ngang:",
+                                err,
+                            );
+                        });
+                    }
+                } else {
+                    // Thoát fullscreen -> Mở khóa xoay
+                    if (screen.orientation && screen.orientation.unlock) {
+                        screen.orientation.unlock();
+                    }
+                }
+            }
+
+            document.addEventListener(
+                "fullscreenchange",
+                handleFullscreenChange,
+            );
+
+            document.addEventListener(
+                "webkitfullscreenchange",
+                handleFullscreenChange,
+            );
+
             // 👉 start
             loadVideos(lastType, lastSort);
         </script>
