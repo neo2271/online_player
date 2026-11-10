@@ -485,8 +485,22 @@ function clearUrl() {
     document.getElementById('url').focus();
 }
 
-function setSpeed(speed) {
-    player.setPlaybackRate(speed);
+let currentRate = 2;
+
+function forcePlaybackRate(rate) {
+    if (!player || typeof player.setPlaybackRate !== "function") return;
+
+    // Nếu đang đúng rate rồi thì ép đổi tạm
+    const tempRate = rate === 2 ? 1.5 : 1;
+    player.setPlaybackRate(tempRate);
+    setTimeout(() => {
+        player.setPlaybackRate(rate);
+    }, 150);
+}
+
+function setSpeed(rate) {
+    currentRate = rate;
+    forcePlaybackRate(rate);
 }
 
 // Hiển thị/ẩn nút clear khi có text
