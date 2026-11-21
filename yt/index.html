@@ -614,9 +614,25 @@
                     playlist.appendChild(item);
                 });
 
-                playlist.querySelector(".active")?.scrollIntoView({
+                scrollActivePlaylistItem();
+            }
+
+            // 👉 Chỉ cuộn trong danh sách playlist, tránh cuộn cả trang
+            function scrollActivePlaylistItem() {
+                const playlist = document.getElementById("playlist");
+                const active = playlist.querySelector(".active");
+                if (!active) return;
+
+                const playlistRect = playlist.getBoundingClientRect();
+                const activeRect = active.getBoundingClientRect();
+
+                // Vị trí item active tính từ đầu danh sách
+                const itemTop =
+                    activeRect.top - playlistRect.top + playlist.scrollTop;
+
+                playlist.scrollTo({
+                    top: itemTop,
                     behavior: "smooth",
-                    block: "nearest",
                 });
             }
 
