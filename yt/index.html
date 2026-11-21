@@ -174,15 +174,23 @@
                 <button onclick="setSpeed(2)">2x</button>
             </div>
             <div class="controls" style="text-align: center; margin-top: 8px">
-                <button onclick="prevVideo()">
+                <button onclick="prevVideo()" title="Video trước">
                     <i data-lucide="skip-back"></i>
                 </button>
 
-                <button onclick="togglePlay()" id="btnPlayPause">
+                <button onclick="seekBy(-10)" title="Tua lùi 10s">
+                    <i data-lucide="rotate-ccw"></i>
+                </button>
+
+                <button onclick="togglePlay()" id="btnPlayPause" title="Chơi/Tạm dừng">
                     <i data-lucide="play"></i>
                 </button>
 
-                <button onclick="nextVideo()">
+                <button onclick="seekBy(10)" title="Tua tới 10s">
+                    <i data-lucide="rotate-cw"></i>
+                </button>
+
+                <button onclick="nextVideo()" title="Video tiếp">
                     <i data-lucide="skip-forward"></i>
                 </button>
             </div>
@@ -451,6 +459,23 @@
                 updateYoutubeLink();
                 video_idx -= 1;
                 renderPlaylist();
+            }
+
+            function seekBy(seconds) {
+                if (!player || typeof player.getCurrentTime !== "function")
+                    return;
+
+                const current = player.getCurrentTime() || 0;
+                const duration = player.getDuration() || 0;
+
+                let target = current + seconds;
+                if (target < 0) target = 0;
+                if (duration > 0 && target > duration) {
+                    target = Math.max(0, duration - 0.5);
+                }
+
+                player.seekTo(target, true);
+                updateVideoTitle();
             }
 
             function updateYoutubeLink() {
