@@ -362,9 +362,67 @@ function onYouTubeIframeAPIReady() {
         events: {
             onReady: (event) => {
                 isPlayerReady = true;
+            },
+            onStateChange: (event) => {
+                const btn = document.getElementById("btnPlayPause");
+                if (!btn) return;
+
+                if (event.data === YT.PlayerState.PLAYING) {
+                    btn.innerHTML =
+                        '<i class="bi bi-pause-fill" style="font-size: 18px"></i>';
+                } else if (
+                    event.data === YT.PlayerState.PAUSED ||
+                    event.data === YT.PlayerState.ENDED
+                ) {
+                    btn.innerHTML =
+                        '<i class="bi bi-play-fill" style="font-size: 18px"></i>';
+                }
             }
         }
     });
+}
+
+function togglePlayYt() {
+    if (!player || typeof player.getPlayerState !== "function") return;
+
+    const btn = document.getElementById("btnPlayPause");
+    const state = player.getPlayerState();
+
+    if (state === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+        if (btn) {
+            btn.innerHTML =
+                '<i class="bi bi-play-fill" style="font-size: 18px"></i>';
+        }
+    } else if (state === -1 || state === YT.PlayerState.BUFFERING) {
+        // Lần đầu load: dùng loadVideoById để trigger play có user gesture
+        player.loadVideoById(yt_video_id);
+        if (btn) {
+            btn.innerHTML =
+                '<i class="bi bi-pause-fill" style="font-size: 18px"></i>';
+        }
+    } else {
+        player.playVideo();
+        if (btn) {
+            btn.innerHTML =
+                '<i class="bi bi-pause-fill" style="font-size: 18px"></i>';
+        }
+    }
+}
+
+function seekBy(seconds) {
+    if (!player || typeof player.getCurrentTime !== "function") return;
+
+    const current = player.getCurrentTime() || 0;
+    const duration = player.getDuration() || 0;
+
+    let target = current + seconds;
+    if (target < 0) target = 0;
+    if (duration > 0 && target > duration) {
+        target = Math.max(0, duration - 0.5);
+    }
+
+    player.seekTo(target, true);
 }
 
 function onPlayerReady(event) {
